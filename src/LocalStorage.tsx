@@ -71,3 +71,7 @@ export function updateCategory(category: Category) {
     });
     setCategories(newCategories);
 }
+
+export function deleteAllCategories() {
+    localStorage.removeItem(ls.categories);
+}

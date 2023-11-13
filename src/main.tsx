@@ -4,6 +4,7 @@ import App from './App.tsx'
 import './index.css'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Layout from './Layout/Layout.tsx'
+import LocalStorageView from './LocalStorageView/LocalStorageView.tsx'
 
 const router = createBrowserRouter([
   {
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
   {
     path: "/layout",
     element: <Layout>Children</Layout>
+  },
+  {
+    path: "/api",
+    element: <Layout><LocalStorageView></LocalStorageView></Layout>
   }
 ]);
 
