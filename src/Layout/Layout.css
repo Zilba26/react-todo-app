@@ -4,9 +4,16 @@
     box-sizing: border-box;
 }
 
+#root {
+    margin: 0 auto;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 .Header {
     height: 50px;
     background-color: red;
+    width: 100%;
 }
 
 main {
@@ -16,4 +23,5 @@ main {
 .Footer {
     height: 50px;
     background-color: green;
+    width: 100%;
 }
