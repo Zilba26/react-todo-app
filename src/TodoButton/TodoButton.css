@@ -1,0 +1,8 @@
+.todo-button {
+    background-color: blue;
+    margin: 10px;
+}
+
+.todo-button:hover {
+    background-color: rgb(0, 0, 189);
+}
