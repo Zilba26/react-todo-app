@@ -13,7 +13,13 @@ const LocalStorageView: FC<LocalStorageViewProps> = () => {
     if (name) {
       const category = new Category(1, name, "#000000");
       addCategory(category);
+      window.location.reload();
     }
+  }
+
+  const deleteAll = () => {
+    deleteAllCategories();
+    window.location.reload();
   }
 
   return (
@@ -30,7 +36,7 @@ const LocalStorageView: FC<LocalStorageViewProps> = () => {
       <div>
         <input type='text' id='category-name'></input>
         <button onClick={addCategoryName}>add</button>
-        <button onClick={deleteAllCategories}>clear</button>
+        <button onClick={deleteAll}>clear</button>
         {
           getCategories().map((category: Category) => (
             <div>
