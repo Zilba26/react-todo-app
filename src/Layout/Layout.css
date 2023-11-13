@@ -1,1 +1,19 @@
-.Layout {}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.Header {
+    height: 50px;
+    background-color: red;
+}
+
+main {
+    min-height: calc(100vh - 100px);
+}
+
+.Footer {
+    height: 50px;
+    background-color: green;
+}

@@ -12,7 +12,6 @@ const Layout: FC<LayoutProps> = (props: LayoutProps) => (
       {props.children}
     </main>
     <Footer />
-
   </div>
 );
 
