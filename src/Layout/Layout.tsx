@@ -1,5 +1,7 @@
 import React, { FC } from 'react';
 import './Layout.css';
+import '../all.css';
+import '../all.min.css'
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 

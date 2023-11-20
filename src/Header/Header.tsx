@@ -5,7 +5,8 @@ interface HeaderProps {}
 
 const Header: FC<HeaderProps> = () => (
   <header className="Header">
-    Header Component
+    <h2>Todo App</h2>
+    <i className="fa-solid fa-bell"></i>
   </header>
 );
 

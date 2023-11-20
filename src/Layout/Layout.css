@@ -8,12 +8,13 @@
     margin: 0 auto;
     padding: 0;
     box-sizing: border-box;
+    width: 100%;
+    max-width: none;
 }
 
 .Header {
     height: 50px;
     background-color: red;
-    width: 100%;
 }
 
 main {
