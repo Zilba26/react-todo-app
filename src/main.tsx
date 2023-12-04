@@ -6,6 +6,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Layout from './Layout/Layout.tsx'
 import LocalStorageView from './LocalStorageView/LocalStorageView.tsx'
 import { Calendar } from './Calendar/Calendar.tsx'
+import ToDoList from "./ToDoList/ToDoList.tsx";
 
 const router = createBrowserRouter([
   {
@@ -14,7 +15,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <App />
+        element: <App />,
       },
       {
         path: "/layout",
@@ -22,14 +23,18 @@ const router = createBrowserRouter([
       },
       {
         path: "/api",
-        element: <LocalStorageView></LocalStorageView>
-      }
-    ]
+        element: <LocalStorageView></LocalStorageView>,
+      },
+      {
+        path: "/todolist",
+        element: <ToDoList></ToDoList>,
+      },
+    ],
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-        <RouterProvider router={router} />
-  </React.StrictMode>,
-)
+    <RouterProvider router={router} />
+  </React.StrictMode>
+);
