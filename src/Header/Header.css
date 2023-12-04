@@ -9,7 +9,7 @@ header {
     justify-content: space-between;
 }
 
-#calendarBox, #bellBox {
+#calendarBox, #bellBox, #moonBox {
     display: flex;
     justify-content: center;
     width: 7%;
@@ -23,16 +23,15 @@ header {
 
 #bellBox {
     justify-content: end;
-    margin-right: 10px;
 }
 
-#bellBox .chakra-icon {
+#bellBox .chakra-icon, #moonBox .chakra-icon {
     height: 25px;
     width: 25px;
     color: white;
 }
 
-#bellBox .chakra-icon:hover {
+#bellBox .chakra-icon:hover, #moonBox .chakra-icon:hover {
     height: 29px;
     width: 29px;
     cursor: pointer;
@@ -42,7 +41,7 @@ header {
     display: flex;
     justify-content: start;
     margin-left: 50px;
-    width: 86%;
+    width: 79%;
 }
 
 #titleBox h2 {
