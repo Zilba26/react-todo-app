@@ -3,6 +3,7 @@ import './LocalStorageView.css';
 import { addCategory, deleteAllCategories, getCategories, getTasks } from '../LocalStorage';
 import { Task } from '../models/Task';
 import { Category } from '../models/Category';
+import { Box, Button, Input } from '@chakra-ui/react';
 
 interface LocalStorageViewProps {}
 
@@ -23,29 +24,29 @@ const LocalStorageView: FC<LocalStorageViewProps> = () => {
   }
 
   return (
-    <div className="LocalStorageView">
-      <div>
+    <Box className="LocalStorageView">
+      <Box>
         {
           getTasks().map((task: Task) => (
-            <div>
-              <div>{task.name}</div>
-            </div>
+            <Box>
+              <Box>{task.name}</Box>
+            </Box>
           ))
         }
-      </div>
-      <div>
-        <input type='text' id='category-name'></input>
-        <button onClick={addCategoryName}>add</button>
-        <button onClick={deleteAll}>clear</button>
+      </Box>
+      <Box>
+        <Input type='text' id='category-name'></Input>
+        <Button onClick={addCategoryName}>add</Button>
+        <Button onClick={deleteAll}>clear</Button>
         {
           getCategories().map((category: Category) => (
-            <div>
-              <div>{category.name}</div>
-            </div>
+            <Box>
+              <Box>{category.name}</Box>
+            </Box>
           ))
         }
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }
 
