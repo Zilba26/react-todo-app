@@ -22,9 +22,11 @@ import {
 
 import { AddIcon } from "@chakra-ui/icons";
 
-function DrawerExample() {
+interface CreateToDoProps {}
+
+const CreateToDo: React.FC<CreateToDoProps> = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const firstField = React.useRef();
+  const firstField = React.useRef(null);
 
   return (
     <>
@@ -93,4 +95,6 @@ function DrawerExample() {
       </Drawer>
     </>
   );
-}
+};
+
+export default CreateToDo;

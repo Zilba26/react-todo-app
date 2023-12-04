@@ -9,6 +9,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import React from "react";
+import CreateToDo from "../CreateToDo/CreateToDo";
 
 interface ToDoListProps {}
 
@@ -16,6 +17,7 @@ const ToDoList: React.FC<ToDoListProps> = () => (
   <Card>
     <CardHeader>
       <Heading size="md">TODO List</Heading>
+      <CreateToDo></CreateToDo>
     </CardHeader>
 
     <CardBody>
