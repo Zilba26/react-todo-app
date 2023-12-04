@@ -7,6 +7,7 @@ import Layout from './Layout/Layout.tsx'
 import LocalStorageView from './LocalStorageView/LocalStorageView.tsx'
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react'
 import theme from './theme'
+import ToDoList from "./ToDoList/ToDoList.tsx";
 
 
 
@@ -17,21 +18,25 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <App />
+        element: <App />,
       },
       {
         path: "/layout",
-        element: "Children"
+        element: "Children",
       },
       {
         path: "/api",
-        element: <LocalStorageView></LocalStorageView>
-      }
-    ]
+        element: <LocalStorageView></LocalStorageView>,
+      },
+      {
+        path: "/todolist",
+        element: <ToDoList></ToDoList>,
+      },
+    ],
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />  
