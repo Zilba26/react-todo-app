@@ -9,16 +9,22 @@ import LocalStorageView from './LocalStorageView/LocalStorageView.tsx'
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <Layout />,
+    children: [
+      {
+        path: "/",
+        element: <App />
+      },
+      {
+        path: "/layout",
+        element: "Children"
+      },
+      {
+        path: "/api",
+        element: <LocalStorageView></LocalStorageView>
+      }
+    ]
   },
-  {
-    path: "/layout",
-    element: <Layout>Children</Layout>
-  },
-  {
-    path: "/api",
-    element: <Layout><LocalStorageView></LocalStorageView></Layout>
-  }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
