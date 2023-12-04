@@ -1,10 +1,11 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import Layout from './Layout/Layout.tsx'
-import LocalStorageView from './LocalStorageView/LocalStorageView.tsx'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.tsx";
+import "./index.css";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import Layout from "./Layout/Layout.tsx";
+import LocalStorageView from "./LocalStorageView/LocalStorageView.tsx";
+import ToDoList from "./ToDoList/ToDoList.tsx";
 
 const router = createBrowserRouter([
   {
@@ -13,16 +14,28 @@ const router = createBrowserRouter([
   },
   {
     path: "/layout",
-    element: <Layout>Children</Layout>
+    element: <Layout>Children</Layout>,
   },
   {
     path: "/api",
-    element: <Layout><LocalStorageView></LocalStorageView></Layout>
-  }
+    element: (
+      <Layout>
+        <LocalStorageView></LocalStorageView>
+      </Layout>
+    ),
+  },
+  {
+    path: "/todolist",
+    element: (
+      <Layout>
+        <ToDoList></ToDoList>
+      </Layout>
+    ),
+  },
 ]);
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-        <RouterProvider router={router} />
-  </React.StrictMode>,
-)
+    <RouterProvider router={router} />
+  </React.StrictMode>
+);
