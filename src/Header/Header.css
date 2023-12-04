@@ -1,5 +1,55 @@
+.Header {
+    background-color: darkblue;
+    height: 60px;
+}
+
 header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+#calendarBox, #bellBox {
+    display: flex;
+    justify-content: center;
+    width: 7%;
+}
+
+#calendarBox .chakra-icon {
+    height: 40px;
+    width: 40px;
+    color: white;
+}
+
+#bellBox {
+    justify-content: end;
+    margin-right: 10px;
+}
+
+#bellBox .chakra-icon {
+    height: 25px;
+    width: 25px;
+    color: white;
+}
+
+#bellBox .chakra-icon:hover {
+    height: 29px;
+    width: 29px;
+    cursor: pointer;
+}
+
+#titleBox {
+    display: flex;
+    justify-content: start;
+    margin-left: 50px;
+    width: 86%;
+}
+
+#titleBox h2 {
+    font-size: 30px;
+    font-family:Georgia, 'Times New Roman', Times, serif;
+}
+
+h2 {
+    color: white;
 }
