@@ -5,7 +5,8 @@ interface FooterProps {}
 
 const Footer: FC<FooterProps> = () => (
   <footer className="Footer">
-    Footer Component
+    <p id="rights">All right reserved</p>
+    <p id="names">LEBAUDY Basile - LEGENDRE Louis - LE DU Maxence</p>
   </footer>
 );
 

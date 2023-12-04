@@ -10,27 +10,25 @@ import ToDoList from "./ToDoList/ToDoList.tsx";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
-  },
-  {
-    path: "/layout",
-    element: <Layout>Children</Layout>,
-  },
-  {
-    path: "/api",
-    element: (
-      <Layout>
-        <LocalStorageView></LocalStorageView>
-      </Layout>
-    ),
-  },
-  {
-    path: "/todolist",
-    element: (
-      <Layout>
-        <ToDoList></ToDoList>
-      </Layout>
-    ),
+    element: <Layout />,
+    children: [
+      {
+        path: "/",
+        element: <App />,
+      },
+      {
+        path: "/layout",
+        element: "Children",
+      },
+      {
+        path: "/api",
+        element: <LocalStorageView></LocalStorageView>,
+      },
+      {
+        path: "/todolist",
+        element: <ToDoList></ToDoList>,
+      },
+    ],
   },
 ]);
 
