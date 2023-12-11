@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { Box } from '@chakra-ui/react'
+import { Box, useColorModeValue } from '@chakra-ui/react'
 import { getEventsByDay } from '../LocalStorage'
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -15,6 +15,7 @@ interface DayTasksProps {
 
 const DayTasks: FC<DayTasksProps> = (props: DayTasksProps) => {
 
+  const backgroundColor = useColorModeValue("#eaf6ff", "var(--chakra-colors-chakra-body-bg)");
 
   if (!props.day) {
     return null
@@ -27,6 +28,7 @@ const DayTasks: FC<DayTasksProps> = (props: DayTasksProps) => {
   const minHour = new Date(min).getHours() < 8 ? new Date(min) : new Date(0,0,0,8);
   const maxHour = new Date(max).getHours() > 19 ? new Date(max) : new Date(0,0,0,19);
 
+
   return (
     <Box flex={1}>
       <Calendar
@@ -35,7 +37,7 @@ const DayTasks: FC<DayTasksProps> = (props: DayTasksProps) => {
         max={maxHour}
         defaultDate={props.day}
         defaultView="day"
-        views={['day']}  
+        views={['day']}
         events={tasks.map((task) => {
           return {
             title: task.name,
@@ -55,6 +57,13 @@ const DayTasks: FC<DayTasksProps> = (props: DayTasksProps) => {
             localizer?.format(start, 'dddd D MMMM YYYY', culture) + // Format de l'en-tête de la plage de jours
             ' - ' +
             localizer?.format(end, 'dddd D MMMM YYYY', culture),
+        }}
+        dayPropGetter={() => {
+          return {
+            style: {
+              backgroundColor: backgroundColor,
+            }
+          }
         }}
       />
     </Box>

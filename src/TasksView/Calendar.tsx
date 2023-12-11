@@ -114,7 +114,7 @@ export const Calendar: FC<CalendarProps> = (props: CalendarProps) => {
     }
 
     return (
-        <Box w="max-content" className='flex-center' flexDir="column">
+        <Box className='flex-center' flexDir="column">
             <Text>{formatMonth(weekDates[0]) + " " + weekDates[0].getFullYear()}</Text>
             <Box h="12px"></Box>
             <Box display="flex">
