@@ -5,12 +5,12 @@ import { getTasks } from '../LocalStorage';
 
 interface CalendarProps {
     selectDate: Date;
+    setSelectDate: (date: Date) => void;
     iconSize?: string;
 }
 
 export const Calendar: FC<CalendarProps> = (props: CalendarProps) => {
 
-    const [selectDate, setSelectDate] = useState<Date>(props.selectDate);
 
     const tasks = getTasks();
 
@@ -37,7 +37,7 @@ export const Calendar: FC<CalendarProps> = (props: CalendarProps) => {
         return weekDates;
     }
 
-    const [weekDates, setWeekDates] = useState<Date[]>(getWeekDates(selectDate));
+    const [weekDates, setWeekDates] = useState<Date[]>(getWeekDates(props.selectDate));
 
     const iconSize = props.iconSize ?? "50px";
 
@@ -128,8 +128,8 @@ export const Calendar: FC<CalendarProps> = (props: CalendarProps) => {
                         return (
                             <Box key={index} className='flex-center' flexDir="column">
                                 <Box className='flex-center' flexDir="column"
-                                  w={iconSize} h={iconSize} borderRadius="100%" onClick={() => setSelectDate(date)} cursor="pointer"
-                                  border={date.getTime() == selectDate.getTime() ? "3px solid darkblue" : "none"}>
+                                  w={iconSize} h={iconSize} borderRadius="100%" onClick={() => props.setSelectDate(date)} cursor="pointer"
+                                  border={date.getTime() == props.selectDate.getTime() ? "3px solid darkblue" : "none"}>
                                     <Text fontSize="12px">{formatDay(date)}</Text>
                                     <Text>{date.getDate()}</Text>
                                 </Box>

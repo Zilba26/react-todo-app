@@ -5,8 +5,8 @@ import './index.css'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Layout from './Layout/Layout.tsx'
 import LocalStorageView from './LocalStorageView/LocalStorageView.tsx'
-import { Calendar } from './Calendar/Calendar.tsx'
 import ToDoList from "./ToDoList/ToDoList.tsx";
+import TaskView from './TasksView/TaskView.tsx'
 
 const router = createBrowserRouter([
   {
@@ -19,7 +19,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/layout",
-        element: <Calendar selectDate={new Date()}></Calendar>
+        element: <TaskView></TaskView>,
       },
       {
         path: "/api",

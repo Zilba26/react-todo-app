@@ -12,6 +12,16 @@ export function getTasks() : Task[] {
     return JSON.parse(localStorage.getItem(ls.tasks) || '[]');
 }
 
+export function getTasksByDay(day: Date) : Task[] {
+    const tasks = getTasks();
+    return tasks.filter((task: Task) => {
+        return task.date.getFullYear() === day.getFullYear() &&
+            task.date.getMonth() === day.getMonth() &&
+            task.date.getDate() === day.getDate();
+    });
+
+}
+
 export function setTasks(tasks: Task[]) {
     localStorage.setItem(ls.tasks, JSON.stringify(tasks));
 }
