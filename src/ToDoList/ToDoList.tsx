@@ -22,7 +22,7 @@ const ToDoList: React.FC<ToDoListProps> = () => {
   const tasks: Task[] = getTasks();
 
   return (
-    <Card width="50%">
+    <Card>
       <CardHeader>
         <Heading size="md">TODO List</Heading>
         {/* Assuming CreateTask and CreateEvent are your components for adding tasks and events */}
