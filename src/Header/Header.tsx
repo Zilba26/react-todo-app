@@ -1,21 +1,19 @@
-import { FC } from 'react';
-import './Header.css';
-import { BellIcon, CalendarIcon, MoonIcon } from '@chakra-ui/icons'
-import { Box } from '@chakra-ui/react';
-import { useColorMode } from '@chakra-ui/react';
+import { BellIcon, MoonIcon } from "@chakra-ui/icons";
+import { Box, useColorMode } from "@chakra-ui/react";
+import { FC } from "react";
+import "./Header.css";
 
 interface HeaderProps {}
 
 const Header: FC<HeaderProps> = () => {
+  const { toggleColorMode } = useColorMode();
 
-  const {toggleColorMode} = useColorMode();
-
-  return(
+  return (
     <header className="Header">
-      <Box id="calendarBox">
-        <CalendarIcon></CalendarIcon>
+      <Box id="logoBox">
+        <img src={"ressource/img/logo-todo-app.png"} alt="Image" />
       </Box>
-      
+
       <Box id="titleBox">
         <h2>Todo App</h2>
       </Box>
@@ -29,7 +27,6 @@ const Header: FC<HeaderProps> = () => {
       </Box>
     </header>
   );
-
 };
 
 export default Header;
