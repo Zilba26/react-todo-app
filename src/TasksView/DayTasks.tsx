@@ -1,6 +1,13 @@
 import { FC } from 'react'
 import { Box } from '@chakra-ui/react'
-import { getTasksByDay } from '../LocalStorage'
+import { getEventsByDay } from '../LocalStorage'
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import moment from 'moment';
+
+const userLocale = window.navigator.language || 'en-US';
+moment.locale(userLocale);
+const localizer = momentLocalizer(moment);
 
 interface DayTasksProps {
   day: Date
@@ -13,15 +20,43 @@ const DayTasks: FC<DayTasksProps> = (props: DayTasksProps) => {
     return null
   }
 
-  const tasks = getTasksByDay(props.day).sort((a, b) => a.date.getTime() - b.date.getTime())
+  const tasks = getEventsByDay(props.day);
+  const min = Math.min(...tasks.map((task) => task.startDate.getTime()));
+  const max = Math.max(...tasks.map((task) => task.endDate.getTime()));
+
+  const minHour = new Date(min).getHours() < 8 ? new Date(min) : new Date(0,0,0,8);
+  const maxHour = new Date(max).getHours() > 19 ? new Date(max) : new Date(0,0,0,19);
 
   return (
     <Box>
-      {tasks.map((task) => (
-        <Box key={task.id} bg="gray.100" p={2} mt={2} borderRadius="md">
-          {task.name}
-        </Box>
-      ))}
+      <Calendar
+        localizer={localizer}
+        min={minHour}
+        max={maxHour}
+        defaultDate={props.day}
+        defaultView="day"
+        views={['day']}  
+        events={tasks.map((task) => {
+          return {
+            title: task.name,
+            start: task.startDate,
+            end: task.endDate,
+            allDay: false,
+          }
+        })}
+        toolbar={false}
+        formats={{
+          timeGutterFormat: 'HH:mm', // Format de l'heure dans la colonne de l'heure
+          eventTimeRangeFormat: ({ start, end }, culture, localizer) =>
+            localizer?.format(start, 'HH:mm', culture) +
+            ' - ' +
+            localizer?.format(end, 'HH:mm', culture), // Format de l'heure de début et de fin des événements
+          dayRangeHeaderFormat: ({ start, end }, culture, localizer) =>
+            localizer?.format(start, 'dddd D MMMM YYYY', culture) + // Format de l'en-tête de la plage de jours
+            ' - ' +
+            localizer?.format(end, 'dddd D MMMM YYYY', culture),
+        }}
+      />
     </Box>
   )
 }

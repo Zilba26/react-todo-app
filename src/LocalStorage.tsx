@@ -14,11 +14,12 @@ export function getEvents(): Event[] {
 
 export function getEventsByDay(day: Date) : Event[] {
     const tasks = getEvents();
-    return tasks.filter((task: Event) => {
-        return task.date.getFullYear() === day.getFullYear() &&
-            task.date.getMonth() === day.getMonth() &&
-            task.date.getDate() === day.getDate();
-    });
+    return tasks
+    // .filter((task: Event) => {
+    //     return task.date.getFullYear() === day.getFullYear() &&
+    //         task.date.getMonth() === day.getMonth() &&
+    //         task.date.getDate() === day.getDate();
+    // });
 
 }
 

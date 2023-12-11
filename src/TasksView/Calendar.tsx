@@ -1,7 +1,7 @@
 import { ArrowBackIcon, ArrowForwardIcon } from '@chakra-ui/icons';
 import { Box, Text } from '@chakra-ui/react';
 import { FC, useState } from 'react'
-import { getTasks } from '../LocalStorage';
+import { getEvents } from '../LocalStorage';
 
 interface CalendarProps {
     selectDate: Date;
@@ -12,7 +12,7 @@ interface CalendarProps {
 export const Calendar: FC<CalendarProps> = (props: CalendarProps) => {
 
 
-    const tasks = getTasks();
+    const tasks = getEvents();
 
     const equalsDay = (date1: Date, date2: Date) => {
         return date1.getDate() === date2.getDate() 
@@ -120,7 +120,7 @@ export const Calendar: FC<CalendarProps> = (props: CalendarProps) => {
             <Box display="flex">
                 <Box borderRadius="100%" bgColor="darkblue" w={iconSize} h={iconSize} cursor="pointer"
                     display="flex" alignItems="center" justifyContent="center" onClick={backwardWeek}>
-                    <ArrowBackIcon fontSize="24" />
+                    <ArrowBackIcon color="white" fontSize="24" />
                 </Box>
                 <Box w="6px"></Box>
                 <Box display="flex" gap="6px">
@@ -134,7 +134,7 @@ export const Calendar: FC<CalendarProps> = (props: CalendarProps) => {
                                     <Text>{date.getDate()}</Text>
                                 </Box>
                                 <Box w="8px" h="8px" borderRadius="100%" mt="4px"
-                                    bgColor={tasks.filter(task => equalsDay(task.date, date)).length > 0 
+                                    bgColor={tasks.filter(task => equalsDay(task.startDate, date)).length > 0 
                                         ? "orange" : "transparent"}>
                                 </Box>
                             </Box>
@@ -144,7 +144,7 @@ export const Calendar: FC<CalendarProps> = (props: CalendarProps) => {
                 <Box w="6px"></Box>
                 <Box borderRadius="100%" bgColor="darkblue" w={iconSize} h={iconSize} cursor="pointer"
                     display="flex" alignItems="center" justifyContent="center" onClick={forwardWeek}>                    
-                    <ArrowForwardIcon fontSize="24" />
+                    <ArrowForwardIcon color="white" fontSize="24" />
                 </Box>
             </Box>
         </Box>
