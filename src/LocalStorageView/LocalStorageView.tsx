@@ -4,9 +4,9 @@ import {
   addCategory,
   deleteAllCategories,
   getCategories,
-  getTasks,
+  getEvents,
 } from "../LocalStorage";
-import { Task } from "../models/Event";
+import { Event } from "../models/Event";
 import { Category } from "../models/Category";
 import { Box, Button, Input } from "@chakra-ui/react";
 
@@ -31,7 +31,7 @@ const LocalStorageView: FC<LocalStorageViewProps> = () => {
   return (
     <Box className="LocalStorageView">
       <Box>
-        {getTasks().map((task: Task) => (
+        {getEvents().map((task: Event) => (
           <Box>
             <Box>{task.name}</Box>
           </Box>
