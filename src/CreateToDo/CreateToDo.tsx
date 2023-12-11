@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Box,
   Button,
@@ -11,13 +10,12 @@ import {
   DrawerOverlay,
   FormLabel,
   Input,
-  InputGroup,
-  InputLeftAddon,
-  InputRightAddon,
+  Select,
   Stack,
   Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
+import React from "react";
 
 import { AddIcon } from "@chakra-ui/icons";
 
@@ -58,25 +56,50 @@ const CreateToDo: React.FC<CreateToDoProps> = () => {
                 <Textarea id="desc" />
               </Box>
               <Box>
-                <FormLabel htmlFor="date">Date</FormLabel>
-                <Input type="date" id="date" />
+                <FormLabel htmlFor="start_date">Start Date</FormLabel>
+                <Input type="date" id="start_date" />
               </Box>
               <Box>
-                <FormLabel htmlFor="duration">Duration</FormLabel>
-                <InputGroup>
-                  <InputLeftAddon children="Minutes" />
-                  <Input type="number" placeholder="Please enter a duration" />
-                  <InputRightAddon children="Minutes" />
-                </InputGroup>
+                <FormLabel htmlFor="end_date">End Date</FormLabel>
+                <Input type="date" id="end_date" />
               </Box>
               <Box>
-                <FormLabel htmlFor="reminders">Reminders</FormLabel>
-                <Input type="date" id="reminders" />
+                <FormLabel htmlFor="reminders">Reminder</FormLabel>
+                <Select>
+                  <option value="option1" selected={true}>
+                    None
+                  </option>
+                  <option value="option2">At the hour</option>
+                  <option value="option3">5min before</option>
+                  <option value="option4">10min before</option>
+                  <option value="option5">15min before</option>
+                  <option value="option6">30min before</option>
+                  <option value="option7">1h before</option>
+                  <option value="option8">2h before</option>
+                  <option value="option9">1d before</option>
+                  <option value="option10">2d before</option>
+                  <option value="option11">1w before</option>
+                </Select>
+              </Box>
+              <Box>
+                <FormLabel htmlFor="priority">Priority</FormLabel>
+                <Select>
+                  <option value="option1" selected={true}>
+                    Light
+                  </option>
+                  <option value="option2">Normal</option>
+                  <option value="option3">Hight</option>
+                </Select>
               </Box>
             </Stack>
           </DrawerBody>
 
-          <DrawerFooter borderTopWidth="1px">
+          <DrawerFooter
+            borderTopWidth="1px"
+            display="flex"
+            flexDirection="row"
+            justifyContent="space-evenly"
+          >
             <Button variant="outline" mr={3} onClick={onClose}>
               Cancel
             </Button>
