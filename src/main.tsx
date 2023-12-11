@@ -4,10 +4,10 @@ import App from './App.tsx'
 import './index.css'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Layout from './Layout/Layout.tsx'
-import LocalStorageView from './LocalStorageView/LocalStorageView.tsx'
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react'
 import theme from './theme'
 import ToDoList from "./ToDoList/ToDoList.tsx";
+import TaskView from './TasksView/TaskView.tsx'
 
 
 
@@ -22,11 +22,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/layout",
-        element: "Children",
-      },
-      {
-        path: "/api",
-        element: <LocalStorageView></LocalStorageView>,
+        element: <TaskView></TaskView>,
       },
       {
         path: "/todolist",

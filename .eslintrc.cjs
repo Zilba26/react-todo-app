@@ -14,5 +14,10 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    //disabled complete eslint@typescript-eslint/no-unused-vars when variable name = props
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      { varsIgnorePattern: 'props', argsIgnorePattern: 'props' }
+    ],
   },
 }

@@ -46,6 +46,17 @@ export function getEvents(): Event[] {
   return JSON.parse(localStorage.getItem(ls.events) || "[]");
 }
 
+export function getEventsByDay(day: Date) : Event[] {
+    const tasks = getEvents();
+    return tasks
+    // .filter((task: Event) => {
+    //     return task.date.getFullYear() === day.getFullYear() &&
+    //         task.date.getMonth() === day.getMonth() &&
+    //         task.date.getDate() === day.getDate();
+    // });
+
+}
+
 export function setEvents(events: Event[]) {
   localStorage.setItem(ls.events, JSON.stringify(events));
 }
