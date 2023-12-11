@@ -1,4 +1,4 @@
-import { Importancy } from "./Importancy";
+import { Priority } from "./Priority";
 
 export class Event {
     id: number;
@@ -8,10 +8,10 @@ export class Event {
     endDate: Date;
     reminder: Date;
     category: number;
-    importancy: Importancy;
+    priority: Priority;
 
     constructor(id: number, name: string, description: string, startDate: Date, endDate: Date,
-        reminder: Date, category: number, importancy: Importancy) {
+        reminder: Date, category: number, priority: Priority) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -19,6 +19,6 @@ export class Event {
         this.endDate = endDate;
         this.reminder = reminder;
         this.category = category;
-        this.importancy = importancy;
+        this.priority = priority;
     }
 }

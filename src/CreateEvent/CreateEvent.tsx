@@ -19,16 +19,16 @@ import React from "react";
 
 import { AddIcon } from "@chakra-ui/icons";
 
-interface CreateToDoProps {}
+interface CreateEventProps {}
 
-const CreateToDo: React.FC<CreateToDoProps> = () => {
+const CreateEvent: React.FC<CreateEventProps> = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = React.useRef(null);
 
   return (
     <>
       <Button leftIcon={<AddIcon />} colorScheme="teal" onClick={onOpen}>
-        Create ToDo
+        Create Event
       </Button>
       <Drawer
         isOpen={isOpen}
@@ -39,7 +39,9 @@ const CreateToDo: React.FC<CreateToDoProps> = () => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader borderBottomWidth="1px">Create a new ToDo</DrawerHeader>
+          <DrawerHeader borderBottomWidth="1px">
+            Create a new Event
+          </DrawerHeader>
 
           <DrawerBody>
             <Stack spacing="24px">
@@ -111,4 +113,4 @@ const CreateToDo: React.FC<CreateToDoProps> = () => {
   );
 };
 
-export default CreateToDo;
+export default CreateEvent;

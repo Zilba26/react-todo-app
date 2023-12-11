@@ -1,10 +1,46 @@
 import { Category } from "./models/Category";
 import { Event } from "./models/Event";
+import { Reminder } from "./models/Reminder";
 
 const ls = {
   events: "events",
+  reminders: "reminders",
   categories: "categories",
 };
+
+// Reminders
+export function getReminders(): Reminder[] {
+  return JSON.parse(localStorage.getItem(ls.reminders) || "[]");
+}
+
+export function setReminders(reminders: Reminder[]) {
+  localStorage.setItem(ls.reminders, JSON.stringify(reminders));
+}
+
+export function addReminder(reminder: Reminder) {
+  const reminders = getReminders();
+  reminders.push(reminder);
+  setReminders(reminders);
+}
+
+export function deleteReminder(id: number) {
+  const reminders = getReminders();
+  const newReminders = reminders.filter(
+    (reminder: Reminder) => reminder.id !== id
+  );
+  setReminders(newReminders);
+}
+
+export function updateReminder(reminder: Reminder) {
+  const reminders = getReminders();
+  const newReminders = reminders.map((r: Reminder) => {
+    if (r.id === reminder.id) {
+      return reminder;
+    }
+    return r;
+  });
+  setReminders(newReminders);
+}
 
 // Events
 
@@ -72,8 +108,4 @@ export function updateCategory(category: Category) {
     return c;
   });
   setCategories(newCategories);
-}
-
-export function deleteAllCategories() {
-  localStorage.removeItem(ls.categories);
 }
