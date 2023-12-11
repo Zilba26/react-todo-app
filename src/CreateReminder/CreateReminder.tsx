@@ -62,10 +62,6 @@ const CreateReminder: React.FC<CreateReminderProps> = () => {
                 <Input type="date" id="date" />
               </Box>
               <Box>
-                <FormLabel htmlFor="end_date">End Date</FormLabel>
-                <Input type="date" id="end_date" />
-              </Box>
-              <Box>
                 <FormLabel htmlFor="priority">Priority</FormLabel>
                 <Select>
                   <option value="option1" selected={true}>

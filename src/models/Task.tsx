@@ -1,6 +1,6 @@
 import { Priority } from "./Priority";
 
-export class Reminder {
+export class Task {
   id: number;
   name: string;
   description: string;

@@ -1,45 +1,43 @@
 import { Category } from "./models/Category";
 import { Event } from "./models/Event";
-import { Reminder } from "./models/Reminder";
+import { Task } from "./models/Task";
 
 const ls = {
   events: "events",
-  reminders: "reminders",
+  tasks: "tasks",
   categories: "categories",
 };
 
-// Reminders
-export function getReminders(): Reminder[] {
-  return JSON.parse(localStorage.getItem(ls.reminders) || "[]");
+// Tasks
+export function getTasks(): Task[] {
+  return JSON.parse(localStorage.getItem(ls.tasks) || "[]");
 }
 
-export function setReminders(reminders: Reminder[]) {
-  localStorage.setItem(ls.reminders, JSON.stringify(reminders));
+export function setTasks(tasks: Task[]) {
+  localStorage.setItem(ls.tasks, JSON.stringify(tasks));
 }
 
-export function addReminder(reminder: Reminder) {
-  const reminders = getReminders();
-  reminders.push(reminder);
-  setReminders(reminders);
+export function addTask(task: Task) {
+  const tasks = getTasks();
+  tasks.push(task);
+  setTasks(tasks);
 }
 
-export function deleteReminder(id: number) {
-  const reminders = getReminders();
-  const newReminders = reminders.filter(
-    (reminder: Reminder) => reminder.id !== id
-  );
-  setReminders(newReminders);
+export function deleteTask(id: number) {
+  const tasks = getTasks();
+  const newTasks = tasks.filter((task: Task) => task.id !== id);
+  setTasks(newTasks);
 }
 
-export function updateReminder(reminder: Reminder) {
-  const reminders = getReminders();
-  const newReminders = reminders.map((r: Reminder) => {
-    if (r.id === reminder.id) {
-      return reminder;
+export function updateTask(task: Task) {
+  const tasks = getTasks();
+  const newTasks = tasks.map((r: Task) => {
+    if (r.id === task.id) {
+      return task;
     }
     return r;
   });
-  setReminders(newReminders);
+  setTasks(newTasks);
 }
 
 // Events

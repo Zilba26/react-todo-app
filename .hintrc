@@ -10,6 +10,7 @@
       }
     ],
     "typescript-config/is-valid": "off",
-    "compat-api/css": "off"
+    "compat-api/css": "off",
+    "disown-opener": "off"
   }
 }
