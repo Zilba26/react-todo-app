@@ -1,42 +1,42 @@
 import { Category } from "./models/Category";
-import { Task } from "./models/Event";
+import { Event } from "./models/Event";
 
 const ls = {
-  tasks: "tasks",
+  events: "events",
   categories: "categories",
 };
 
-// Tasks
+// Events
 
-export function getTasks(): Task[] {
-  return JSON.parse(localStorage.getItem(ls.tasks) || "[]");
+export function getEvents(): Event[] {
+  return JSON.parse(localStorage.getItem(ls.events) || "[]");
 }
 
-export function setTasks(tasks: Task[]) {
-  localStorage.setItem(ls.tasks, JSON.stringify(tasks));
+export function setEvents(events: Event[]) {
+  localStorage.setItem(ls.events, JSON.stringify(events));
 }
 
-export function addTask(task: Task) {
-  const tasks = getTasks();
-  tasks.push(task);
-  setTasks(tasks);
+export function addEvent(event: Event) {
+  const events = getEvents();
+  events.push(event);
+  setEvents(events);
 }
 
-export function deleteTask(id: number) {
-  const tasks = getTasks();
-  const newTasks = tasks.filter((task: Task) => task.id !== id);
-  setTasks(newTasks);
+export function deleteEvent(id: number) {
+  const events = getEvents();
+  const newEvents = events.filter((event: Event) => event.id !== id);
+  setEvents(newEvents);
 }
 
-export function updateTask(task: Task) {
-  const tasks = getTasks();
-  const newTasks = tasks.map((t: Task) => {
-    if (t.id === task.id) {
-      return task;
+export function updateEvent(event: Event) {
+  const events = getEvents();
+  const newEvents = events.map((t: Event) => {
+    if (t.id === event.id) {
+      return event;
     }
     return t;
   });
-  setTasks(newTasks);
+  setEvents(newEvents);
 }
 
 // Categories
