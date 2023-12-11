@@ -16,24 +16,21 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { addEvent } from "../LocalStorage";
-import { Event } from "../models/Event";
 
 import { AddIcon } from "@chakra-ui/icons";
+import { Task } from "../models/Task";
 import { Priority } from "../models/Priority";
-import { Category } from "../models/Category";
+import { addTask } from "../LocalStorage";
 
-interface CreateEventProps {}
+interface CreateTaskProps {}
 
-const CreateEvent: React.FC<CreateEventProps> = () => {
+const CreateTask: React.FC<CreateTaskProps> = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    startDate: "",
-    endDate: "",
-    reminder: "", // Default to 'None'
-    priority: Priority.LIGHT, // Default to 'Light'
+    date: "",
+    priority: Priority.LIGHT,
   });
 
   const firstField = React.useRef(null);
@@ -48,28 +45,24 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
   };
 
   const handleCreate = () => {
-    // Validate and handle the creation of the event
-    const { name, description, startDate, endDate, reminder, priority } =
-      formData;
+    // Validate and handle the creation of the reminder
+    const { name, description, date, priority } = formData;
 
     // Validate the form data here
 
-    // Create a new event
-    const newEvent = new Event(
+    // Create a new reminder
+    const newTask = new Task(
       // You can generate a unique ID using a function or a library
       // For simplicity, you can use the current timestamp as an ID
       Date.now(),
       name,
       description,
-      new Date(startDate),
-      new Date(endDate),
-      new Date(reminder),
-      new Category(0, "None", "#000000"),
-      priority
+      new Date(date),
+      priority as Priority
     );
 
-    // Add the new event to the list
-    addEvent(newEvent);
+    // Add the new reminder to the list
+    addTask(newTask);
 
     // Close the drawer
     onClose();
@@ -78,20 +71,18 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
   return (
     <>
       <Button leftIcon={<AddIcon />} colorScheme="teal" onClick={onOpen}>
-        Create Event
+        Create Task
       </Button>
       <Drawer
         isOpen={isOpen}
-        placement="right"
+        placement="left"
         initialFocusRef={firstField}
         onClose={onClose}
       >
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader borderBottomWidth="1px">
-            Create a new Event
-          </DrawerHeader>
+          <DrawerHeader borderBottomWidth="1px">Create a new Task</DrawerHeader>
 
           <DrawerBody>
             <Stack spacing="24px">
@@ -114,32 +105,13 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
                 />
               </Box>
               <Box>
-                <FormLabel htmlFor="startDate">Start Date</FormLabel>
+                <FormLabel htmlFor="date">Date</FormLabel>
                 <Input
                   type="date"
-                  id="startDate"
-                  value={formData.startDate}
+                  id="date"
+                  value={formData.date}
                   onChange={handleInputChange}
                 />
-              </Box>
-              <Box>
-                <FormLabel htmlFor="endDate">End Date</FormLabel>
-                <Input
-                  type="date"
-                  id="endDate"
-                  value={formData.endDate}
-                  onChange={handleInputChange}
-                />
-              </Box>
-              <Box>
-                <FormLabel htmlFor="reminder">Reminder</FormLabel>
-                <Select
-                  id="reminder"
-                  value={formData.reminder}
-                  onChange={handleInputChange}
-                >
-                  {/* Options for reminder */}
-                </Select>
               </Box>
               <Box>
                 <FormLabel htmlFor="priority">Priority</FormLabel>
@@ -148,7 +120,9 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
                   value={formData.priority}
                   onChange={handleInputChange}
                 >
-                  {/* Options for priority */}
+                  <option value={Priority.LIGHT}>{Priority.LIGHT}</option>
+                  <option value={Priority.NORMAL}>{Priority.NORMAL}</option>
+                  <option value={Priority.HIGHT}>{Priority.HIGHT}</option>
                 </Select>
               </Box>
             </Stack>
@@ -173,4 +147,4 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
   );
 };
 
-export default CreateEvent;
+export default CreateTask;

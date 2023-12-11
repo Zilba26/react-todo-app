@@ -12,54 +12,50 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import CreateEvent from "../CreateEvent/CreateEvent";
+import CreateTask from "../CreateTask/CreateTask";
+import { Task } from "../models/Task";
+import { getTasks } from "../LocalStorage";
 
 interface ToDoListProps {}
 
-const ToDoList: React.FC<ToDoListProps> = () => (
-  <Card width="50%">
-    <CardHeader>
-      <Heading size="md">TODO List</Heading>
-      <CreateEvent></CreateEvent>
-    </CardHeader>
+const ToDoList: React.FC<ToDoListProps> = () => {
+  const tasks: Task[] = getTasks();
 
-    <CardBody>
-      <Accordion>
-        <AccordionItem>
-          <h2>
-            <AccordionButton>
-              <Box as="span" flex="1" textAlign="left">
-                Section 1 title
-              </Box>
-              <AccordionIcon />
-            </AccordionButton>
-          </h2>
-          <AccordionPanel pb={4}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
-          </AccordionPanel>
-        </AccordionItem>
+  return (
+    <Card width="50%">
+      <CardHeader>
+        <Heading size="md">TODO List</Heading>
+        {/* Assuming CreateTask and CreateEvent are your components for adding tasks and events */}
+        <Box display="flex" flexDirection="row" justifyContent="space-evenly">
+          <CreateTask />
+          <CreateEvent />
+        </Box>
+      </CardHeader>
 
-        <AccordionItem>
-          <h2>
-            <AccordionButton>
-              <Box as="span" flex="1" textAlign="left">
-                Section 2 title
-              </Box>
-              <AccordionIcon />
-            </AccordionButton>
-          </h2>
-          <AccordionPanel pb={4}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
-          </AccordionPanel>
-        </AccordionItem>
-      </Accordion>
-    </CardBody>
-  </Card>
-);
+      <CardBody>
+        <Accordion allowToggle>
+          {tasks.map((task) => (
+            <AccordionItem key={task.id}>
+              <h2>
+                <AccordionButton>
+                  <Box as="span" flex="1" textAlign="left">
+                    {task.name}
+                  </Box>
+                  <AccordionIcon />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel pb={4}>
+                <p>Date: {new Date(task.date).toDateString()}</p>
+                <p>Description: {task.description}</p>
+                <p>Priority: {task.priority}</p>
+                {/* Add any additional details you want to display */}
+              </AccordionPanel>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </CardBody>
+    </Card>
+  );
+};
 
 export default ToDoList;
