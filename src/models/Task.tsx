@@ -1,3 +1,4 @@
+import { TaskImportancy } from "./TaskImportancy";
 import { TaskState } from "./TaskState";
 
 export class Task {
@@ -9,9 +10,10 @@ export class Task {
     reminders: Date[];
     category: number;
     state: TaskState;
+    importancy: TaskImportancy;
 
     constructor(id: number, name: string, description: string, duration: number, 
-        date: Date, reminders: Date[], category: number, state: TaskState) {
+        date: Date, reminders: Date[], category: number, state: TaskState, importancy: TaskImportancy) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -20,5 +22,6 @@ export class Task {
         this.reminders = reminders;
         this.category = category;
         this.state = state;
+        this.importancy = importancy;
     }
 }
