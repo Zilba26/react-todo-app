@@ -19,5 +19,6 @@ module.exports = {
       'error',
       { varsIgnorePattern: 'props', argsIgnorePattern: 'props' }
     ],
+    '@typescript-eslint/no-explicit-any': 'off',
   },
 }
