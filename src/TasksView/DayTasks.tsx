@@ -28,7 +28,7 @@ const DayTasks: FC<DayTasksProps> = (props: DayTasksProps) => {
   const maxHour = new Date(max).getHours() > 19 ? new Date(max) : new Date(0,0,0,19);
 
   return (
-    <Box>
+    <Box flex={1}>
       <Calendar
         localizer={localizer}
         min={minHour}

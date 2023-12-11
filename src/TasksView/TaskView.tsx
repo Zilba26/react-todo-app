@@ -11,7 +11,7 @@ const TaskView: FC<TaskViewProps> = (props: TaskViewProps) => {
   const [selectDate, setSelectDate] = useState<Date>(new Date());
 
   return (
-    <Box>
+    <Box display="flex" flexDir="column" w="100%">
       <Calendar selectDate={selectDate} setSelectDate={setSelectDate}></Calendar>
       <DayTasks day={selectDate}></DayTasks>
     </Box>
