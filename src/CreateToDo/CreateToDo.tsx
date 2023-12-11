@@ -14,7 +14,6 @@ import {
   InputGroup,
   InputLeftAddon,
   InputRightAddon,
-  Select,
   Stack,
   Textarea,
   useDisclosure,
@@ -31,56 +30,48 @@ const CreateToDo: React.FC<CreateToDoProps> = () => {
   return (
     <>
       <Button leftIcon={<AddIcon />} colorScheme="teal" onClick={onOpen}>
-        Create user
+        Create ToDo
       </Button>
       <Drawer
         isOpen={isOpen}
-        placement="right"
+        placement="left"
         initialFocusRef={firstField}
         onClose={onClose}
       >
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader borderBottomWidth="1px">
-            Create a new account
-          </DrawerHeader>
+          <DrawerHeader borderBottomWidth="1px">Create a new ToDo</DrawerHeader>
 
           <DrawerBody>
             <Stack spacing="24px">
               <Box>
-                <FormLabel htmlFor="username">Name</FormLabel>
+                <FormLabel htmlFor="tnameitle">Name</FormLabel>
                 <Input
                   ref={firstField}
-                  id="username"
-                  placeholder="Please enter user name"
+                  id="name"
+                  placeholder="Please enter a name"
                 />
               </Box>
-
-              <Box>
-                <FormLabel htmlFor="url">Url</FormLabel>
-                <InputGroup>
-                  <InputLeftAddon>http://</InputLeftAddon>
-                  <Input
-                    type="url"
-                    id="url"
-                    placeholder="Please enter domain"
-                  />
-                  <InputRightAddon>.com</InputRightAddon>
-                </InputGroup>
-              </Box>
-
-              <Box>
-                <FormLabel htmlFor="owner">Select Owner</FormLabel>
-                <Select id="owner" defaultValue="segun">
-                  <option value="segun">Segun Adebayo</option>
-                  <option value="kola">Kola Tioluwani</option>
-                </Select>
-              </Box>
-
               <Box>
                 <FormLabel htmlFor="desc">Description</FormLabel>
                 <Textarea id="desc" />
+              </Box>
+              <Box>
+                <FormLabel htmlFor="date">Date</FormLabel>
+                <Input type="date" id="date" />
+              </Box>
+              <Box>
+                <FormLabel htmlFor="duration">Duration</FormLabel>
+                <InputGroup>
+                  <InputLeftAddon children="Minutes" />
+                  <Input type="number" placeholder="Please enter a duration" />
+                  <InputRightAddon children="Minutes" />
+                </InputGroup>
+              </Box>
+              <Box>
+                <FormLabel htmlFor="reminders">Reminders</FormLabel>
+                <Input type="date" id="reminders" />
               </Box>
             </Stack>
           </DrawerBody>
@@ -89,7 +80,7 @@ const CreateToDo: React.FC<CreateToDoProps> = () => {
             <Button variant="outline" mr={3} onClick={onClose}>
               Cancel
             </Button>
-            <Button colorScheme="blue">Submit</Button>
+            <Button colorScheme="blue">Create</Button>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
