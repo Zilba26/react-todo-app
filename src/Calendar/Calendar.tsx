@@ -1,14 +1,24 @@
 import { ArrowBackIcon, ArrowForwardIcon } from '@chakra-ui/icons';
 import { Box, Text } from '@chakra-ui/react';
 import { FC, useState } from 'react'
+import { getTasks } from '../LocalStorage';
 
 interface CalendarProps {
     selectDate: Date;
+    iconSize?: string;
 }
 
 export const Calendar: FC<CalendarProps> = (props: CalendarProps) => {
 
     const [selectDate, setSelectDate] = useState<Date>(props.selectDate);
+
+    const tasks = getTasks();
+
+    const equalsDay = (date1: Date, date2: Date) => {
+        return date1.getDate() === date2.getDate() 
+        && date1.getMonth() === date2.getMonth() 
+        && date1.getFullYear() === date2.getFullYear();
+    }
 
     const getWeekDates = (startingDate: Date): Date[] => {
         const currentDayOfWeek = startingDate.getDay(); // 0 for Sunday, 1 for Monday, ..., 6 for Saturday
@@ -29,7 +39,7 @@ export const Calendar: FC<CalendarProps> = (props: CalendarProps) => {
 
     const [weekDates, setWeekDates] = useState<Date[]>(getWeekDates(selectDate));
 
-    const iconSize = "40px"
+    const iconSize = props.iconSize ?? "50px";
 
     const formatDay = (date: Date) => {
         switch (date.getDay()) {
@@ -105,30 +115,28 @@ export const Calendar: FC<CalendarProps> = (props: CalendarProps) => {
 
     return (
         <Box>
-            <Text textAlign="left">{formatMonth(weekDates[0]) + " " + weekDates[0].getFullYear()}</Text>
+            <Text ml="16px" textAlign="left">{formatMonth(weekDates[0]) + " " + weekDates[0].getFullYear()}</Text>
             <Box h="12px"></Box>
             <Box display="flex">
                 <Box borderRadius="100%" bgColor="darkblue" w={iconSize} h={iconSize} cursor="pointer"
                     display="flex" alignItems="center" justifyContent="center" onClick={backwardWeek}>
-                    <ArrowBackIcon />
+                    <ArrowBackIcon fontSize="24" />
                 </Box>
                 <Box w="6px"></Box>
                 <Box display="flex" gap="6px">
                     {weekDates.map((date, index) => {
                         return (
-                            <Box key={index} display="flex" flexDir="column" alignItems="center" justifyContent="center">
-                                <Box w={iconSize} h={iconSize} borderRadius="100%" onClick={() => setSelectDate(date)} cursor="pointer"
-                                color={date.getTime() == selectDate.getTime() ? "darkblue" : "white"} 
-                                borderColor={date.getTime() == selectDate.getTime() ? "white" : "darkblue"}
-                                border={date.getTime() == selectDate.getTime() ? "2px solid" : "none"}
-                                >
-                                <Text fontSize="12px">{formatDay(date)}</Text>
-                                <Text>{date.getDate()}</Text>
+                            <Box key={index} className='flex-center' flexDir="column">
+                                <Box className='flex-center' flexDir="column"
+                                  w={iconSize} h={iconSize} borderRadius="100%" onClick={() => setSelectDate(date)} cursor="pointer"
+                                  border={date.getTime() == selectDate.getTime() ? "3px solid darkblue" : "none"}>
+                                    <Text fontSize="12px">{formatDay(date)}</Text>
+                                    <Text>{date.getDate()}</Text>
                                 </Box>
-                                {date.getDay() % 3 === 0
-                                    ? <Box w="8px" h="8px" bgColor="orange" borderRadius="100%" mt="4px"></Box>
-                                    : <Box w="8px" h="8px" bgColor="transparent" borderRadius="100%" mt="4px"></Box>
-                                }
+                                <Box w="8px" h="8px" borderRadius="100%" mt="4px"
+                                    bgColor={tasks.filter(task => equalsDay(task.date, date)).length > 0 
+                                        ? "orange" : "transparent"}>
+                                </Box>
                             </Box>
                         )
                     })}
@@ -136,7 +144,7 @@ export const Calendar: FC<CalendarProps> = (props: CalendarProps) => {
                 <Box w="6px"></Box>
                 <Box borderRadius="100%" bgColor="darkblue" w={iconSize} h={iconSize} cursor="pointer"
                     display="flex" alignItems="center" justifyContent="center" onClick={forwardWeek}>                    
-                    <ArrowForwardIcon />
+                    <ArrowForwardIcon fontSize="24" />
                 </Box>
             </Box>
         </Box>
