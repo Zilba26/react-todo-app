@@ -1,11 +1,6 @@
-.Footer {
+footer {
     background-color: darkblue;
     height: 40px;
-}
-
-footer {
-    display: flex;
-    justify-content: center;
     flex-direction: column;
 }
 
