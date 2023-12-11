@@ -4,10 +4,27 @@ import { getEventsByDay } from '../LocalStorage'
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
+import { Event } from '../models/Event';
 
 const userLocale = window.navigator.language || 'en-US';
 moment.locale(userLocale);
 const localizer = momentLocalizer(moment);
+
+class TaskEvent {
+
+  title: string;
+  start: Date;
+  end: Date;
+  event: Event;
+
+  
+  constructor(event: Event) {
+    this.title = event.name;
+    this.start = event.startDate;
+    this.end = event.endDate;
+    this.event = event;
+  }
+}
 
 interface DayTasksProps {
   day: Date
@@ -39,13 +56,16 @@ const DayTasks: FC<DayTasksProps> = (props: DayTasksProps) => {
         defaultView="day"
         views={['day']}
         events={tasks.map((task) => {
-          return {
-            title: task.name,
-            start: task.startDate,
-            end: task.endDate,
-            allDay: false,
-          }
+          console.log(task);
+          return new TaskEvent(task);
         })}
+        eventPropGetter={(event) => {
+          return {
+            style: {
+              backgroundColor: event.event.category.color,
+            }
+          }
+        }}
         toolbar={false}
         formats={{
           timeGutterFormat: 'HH:mm', // Format de l'heure dans la colonne de l'heure

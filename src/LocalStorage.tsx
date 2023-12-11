@@ -8,6 +8,18 @@ const ls = {
   categories: "categories",
 };
 
+const dateReviver = function (key: string, value: any) {
+  //transform string value "2023-12-11T00:00:00.000Z" to Date object
+  if (typeof value === 'string') {
+    const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/;
+
+    if (dateRegex.test(value)) {
+      return new Date(value);
+    }
+  }
+  return value;
+}
+
 // Tasks
 export function getTasks(): Task[] {
   return JSON.parse(localStorage.getItem(ls.tasks) || "[]");
@@ -43,17 +55,17 @@ export function updateTask(task: Task) {
 // Events
 
 export function getEvents(): Event[] {
-  return JSON.parse(localStorage.getItem(ls.events) || "[]");
+  return JSON.parse(localStorage.getItem(ls.events) || "[]", dateReviver);
 }
 
 export function getEventsByDay(day: Date) : Event[] {
     const tasks = getEvents();
     return tasks
-    // .filter((task: Event) => {
-    //     return task.date.getFullYear() === day.getFullYear() &&
-    //         task.date.getMonth() === day.getMonth() &&
-    //         task.date.getDate() === day.getDate();
-    // });
+    .filter((task: Event) => {
+        return task.startDate.getFullYear() === day.getFullYear() &&
+            task.startDate.getMonth() === day.getMonth() &&
+            task.startDate.getDate() === day.getDate();
+    });
 
 }
 
