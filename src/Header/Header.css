@@ -9,16 +9,15 @@ header {
     justify-content: space-between;
 }
 
-#calendarBox, #bellBox, #moonBox {
+#logoBox, #bellBox, #moonBox {
     display: flex;
     justify-content: center;
     width: 7%;
 }
 
-#calendarBox .chakra-icon {
+#logoBox img {
     height: 40px;
     width: 40px;
-    color: white;
 }
 
 #bellBox {
@@ -40,7 +39,7 @@ header {
 #titleBox {
     display: flex;
     justify-content: start;
-    margin-left: 50px;
+    margin-left: 20px;
     width: 79%;
 }
 
@@ -49,6 +48,6 @@ header {
     font-family:Georgia, 'Times New Roman', Times, serif;
 }
 
-h2 {
+.Header h2 {
     color: white;
 }

@@ -12,8 +12,8 @@ const Header: FC<HeaderProps> = () => {
 
   return(
     <header className="Header">
-      <Box id="calendarBox">
-        <CalendarIcon></CalendarIcon>
+      <Box id="logoBox">
+        <img src={"ressource/img/logo-todo-app.png"} alt="Image"/>
       </Box>
       
       <Box id="titleBox">
