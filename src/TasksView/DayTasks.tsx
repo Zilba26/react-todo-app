@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { Box, useColorModeValue } from '@chakra-ui/react'
 import { getEventsByDay } from '../LocalStorage'
 import { Calendar, momentLocalizer } from 'react-big-calendar';
@@ -34,6 +34,17 @@ const DayTasks: FC<DayTasksProps> = (props: DayTasksProps) => {
 
   const backgroundColor = useColorModeValue("#eaf6ff", "var(--chakra-colors-chakra-body-bg)");
 
+  useEffect(() => {
+    const calendarHeader = document.querySelector('.rbc-time-header-content .rbc-allday-cell .rbc-row-bg > div') as HTMLElement;
+    if (calendarHeader) {
+      const dayString = props.day.toLocaleDateString(
+        userLocale, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      calendarHeader.innerHTML = dayString.charAt(0).toUpperCase() + dayString.slice(1);
+      calendarHeader.style.textAlign = 'center';
+      calendarHeader.style.paddingTop = '0.5rem';
+    }
+  },[props.day])
+
   if (!props.day) {
     return null
   }
@@ -44,7 +55,6 @@ const DayTasks: FC<DayTasksProps> = (props: DayTasksProps) => {
 
   const minHour = new Date(min).getHours() < 8 ? new Date(min) : new Date(0,0,0,8);
   const maxHour = new Date(max).getHours() > 19 ? new Date(max) : new Date(0,0,0,19);
-
 
   return (
     <Box flex={1}>
@@ -73,10 +83,6 @@ const DayTasks: FC<DayTasksProps> = (props: DayTasksProps) => {
             localizer?.format(start, 'HH:mm', culture) +
             ' - ' +
             localizer?.format(end, 'HH:mm', culture), // Format de l'heure de début et de fin des événements
-          dayRangeHeaderFormat: ({ start, end }, culture, localizer) =>
-            localizer?.format(start, 'dddd D MMMM YYYY', culture) + // Format de l'en-tête de la plage de jours
-            ' - ' +
-            localizer?.format(end, 'dddd D MMMM YYYY', culture),
         }}
         dayPropGetter={() => {
           return {
