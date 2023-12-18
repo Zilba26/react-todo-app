@@ -1,6 +1,5 @@
 import { Category } from "./models/Category";
 import { Event } from "./models/Event";
-import { Priority } from "./models/Priority";
 import { Task } from "./models/Task";
 
 const ls = {
@@ -61,10 +60,6 @@ export function getEvents(): Event[] {
 
 export function getEventsByDay(day: Date) : Event[] {
     const tasks = getEvents();
-    const mockEvent = new Event(1, "test", "description", new Date(), new Date(Date.now() + 1000 * 60 * 60 * 2), new Date(), new Category(1, "test", "#AA0000"), Priority.NORMAL);
-    const mockEvent2 = new Event(2, "test", "description2", new Date(Date.now() + 1000 * 60 * 60), new Date(Date.now() + 1000 * 60 * 60 * 3), new Date(), new Category(1, "test", "#AA0000"), Priority.NORMAL);
-    tasks.push(mockEvent);
-    tasks.push(mockEvent2);
     return tasks
     .filter((task: Event) => {
         return task.startDate.getFullYear() === day.getFullYear() &&

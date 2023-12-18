@@ -65,11 +65,11 @@ const DayTasks: FC<DayTasksProps> = (props: DayTasksProps) => {
         step={60}
         timeslots={1}
         defaultDate={props.day}
+        date={props.day}
         defaultView="day"
         views={['day']}
         dayLayoutAlgorithm={'no-overlap'}
         events={tasks.map((task) => {
-          console.log(task);
           return new TaskEvent(task);
         })}
         eventPropGetter={(event) => {
