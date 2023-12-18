@@ -62,6 +62,8 @@ const DayTasks: FC<DayTasksProps> = (props: DayTasksProps) => {
         localizer={localizer}
         min={minHour}
         max={maxHour}
+        step={60}
+        timeslots={1}
         defaultDate={props.day}
         defaultView="day"
         views={['day']}
