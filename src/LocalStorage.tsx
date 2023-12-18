@@ -35,6 +35,17 @@ export function addTask(task: Task) {
   const tasks = getTasks();
   tasks.push(task);
   setTasks(tasks);
+
+  console.log("addTask", task);
+
+  addNotification(
+    new Notification(
+      getNotifications().length + 1,
+      "Notification tâche : " + task.name,
+      task,
+      undefined
+    )
+  );
 }
 
 export function deleteTask(id: number) {
@@ -79,6 +90,14 @@ export function addEvent(event: Event) {
   const events = getEvents();
   events.push(event);
   setEvents(events);
+  addNotification(
+    new Notification(
+      getNotifications().length + 1,
+      "Notification évènement : " + event.name,
+      undefined,
+      event
+    )
+  );
 }
 
 export function deleteEvent(id: number) {
@@ -147,7 +166,7 @@ export function updateCategory(category: Category) {
 // Categories
 
 export function getNotifications(): Notification[] {
-  return JSON.parse(localStorage.getItem(ls.categories) || "[]");
+  return JSON.parse(localStorage.getItem(ls.notifications) || "[]");
 }
 
 export function setNotifications(notifications: Notification[]) {
