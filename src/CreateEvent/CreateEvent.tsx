@@ -1,3 +1,4 @@
+import { AddIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -16,12 +17,14 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { addEvent } from "../LocalStorage";
+import {
+  addEvent,
+  getCategories,
+  getCategoryByName,
+  setCategories,
+} from "../LocalStorage";
 import { Event } from "../models/Event";
-
-import { AddIcon } from "@chakra-ui/icons";
 import { Priority } from "../models/Priority";
-import { Category } from "../models/Category";
 
 interface CreateEventProps {}
 
@@ -31,12 +34,35 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
     name: "",
     description: "",
     startDate: "",
+    startTime: "",
     endDate: "",
+    endTime: "",
     reminder: "", // Default to 'None'
+    category: "Work", // Default to 'Work'
     priority: Priority.LIGHT, // Default to 'Light'
   });
 
+  setCategories([
+    {
+      id: 1,
+      name: "Work",
+      color: "rgb(0, 0, 255)", // RGB.BLUE,
+    },
+    {
+      id: 2,
+      name: "Personal",
+      color: "rgb(0, 0, 255)", // RGB.RED,
+    },
+    {
+      id: 3,
+      name: "Secret",
+      color: "rgb(0, 0, 255)", // RGB.GREEN,
+    },
+  ]);
+
   const firstField = React.useRef(null);
+
+  const categories = getCategories();
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -47,24 +73,38 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
     setFormData((prevData) => ({ ...prevData, [id]: value }));
   };
 
+  const getReminderDate = (date: Date, reminder: number) => {
+    return new Date(date.getTime() - reminder * 60000);
+  };
+
   const handleCreate = () => {
     // Validate and handle the creation of the event
-    const { name, description, startDate, endDate, reminder, priority } =
-      formData;
+    const {
+      name,
+      description,
+      startDate,
+      startTime,
+      endDate,
+      endTime,
+      reminder,
+      category,
+      priority,
+    } = formData;
 
     // Validate the form data here
 
-    // Create a new event
     const newEvent = new Event(
-      // You can generate a unique ID using a function or a library
-      // For simplicity, you can use the current timestamp as an ID
+      // Current timestamp as an ID
       Date.now(),
       name,
       description,
-      new Date(startDate),
-      new Date(endDate),
-      new Date(reminder),
-      new Category(0, "None", "#000000"),
+      new Date(startDate + " " + startTime),
+      new Date(endDate + " " + endTime),
+      getReminderDate(
+        new Date(startDate + " " + startTime),
+        parseInt(reminder)
+      ),
+      getCategoryByName(category),
       priority
     );
 
@@ -73,6 +113,19 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
 
     // Close the drawer
     onClose();
+
+    // Reset the form data
+    setFormData({
+      name: "",
+      description: "",
+      startDate: "",
+      startTime: "",
+      endDate: "",
+      endTime: "",
+      reminder: "", // Default to 'None'
+      category: "Work", // Default to 'Work'
+      priority: Priority.LIGHT, // Default to 'Light'
+    });
   };
 
   return (
@@ -85,6 +138,7 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
         placement="right"
         initialFocusRef={firstField}
         onClose={onClose}
+        size="sm"
       >
         <DrawerOverlay />
         <DrawerContent>
@@ -94,8 +148,8 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
           </DrawerHeader>
 
           <DrawerBody>
-            <Stack spacing="24px">
-              <Box>
+            <Stack spacing="7px">
+              <Box display="flex" flexDirection="column">
                 <FormLabel htmlFor="name">Name</FormLabel>
                 <Input
                   ref={firstField}
@@ -105,50 +159,90 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
                   onChange={handleInputChange}
                 />
               </Box>
-              <Box>
+              <Box display="flex" flexDirection="column">
                 <FormLabel htmlFor="description">Description</FormLabel>
                 <Textarea
                   id="description"
                   value={formData.description}
                   onChange={handleInputChange}
+                  height="20px"
                 />
               </Box>
-              <Box>
+              <Box display="flex" flexDirection="column">
                 <FormLabel htmlFor="startDate">Start Date</FormLabel>
-                <Input
-                  type="date"
-                  id="startDate"
-                  value={formData.startDate}
-                  onChange={handleInputChange}
-                />
+                <Box display="flex" flexDirection="row" gap="10px">
+                  <Input
+                    type="date"
+                    id="startDate"
+                    value={formData.startDate}
+                    onChange={handleInputChange}
+                  />
+                  <Input
+                    type="time"
+                    id="startTime"
+                    value={formData.startTime}
+                    onChange={handleInputChange}
+                  />
+                </Box>
               </Box>
-              <Box>
+              <Box display="flex" flexDirection="column">
                 <FormLabel htmlFor="endDate">End Date</FormLabel>
-                <Input
-                  type="date"
-                  id="endDate"
-                  value={formData.endDate}
-                  onChange={handleInputChange}
-                />
+                <Box display="flex" flexDirection="row" gap="10px">
+                  <Input
+                    type="date"
+                    id="endDate"
+                    value={formData.endDate}
+                    onChange={handleInputChange}
+                  />
+                  <Input
+                    type="time"
+                    id="endTime"
+                    value={formData.endTime}
+                    onChange={handleInputChange}
+                  />
+                </Box>
               </Box>
-              <Box>
+              <Box display="flex" flexDirection="column">
                 <FormLabel htmlFor="reminder">Reminder</FormLabel>
                 <Select
                   id="reminder"
                   value={formData.reminder}
                   onChange={handleInputChange}
                 >
-                  {/* Options for reminder */}
+                  <option value="">None</option>
+                  <option value="15">15 minutes before</option>
+                  <option value="30">30 minutes before</option>
+                  <option value="60">1 hour before</option>
+                  <option value="120">2 hours before</option>
+                  <option value="1440">1 day before</option>
+                  <option value="2880">2 days before</option>
+                  <option value="10080">1 week before</option>
                 </Select>
               </Box>
-              <Box>
+              <Box display="flex" flexDirection="column">
+                <FormLabel htmlFor="category">Category</FormLabel>
+                <Select
+                  id="category"
+                  value={formData.category}
+                  onChange={handleInputChange}
+                >
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.name}>
+                      {category.name}
+                    </option>
+                  ))}
+                </Select>
+              </Box>
+              <Box display="flex" flexDirection="column">
                 <FormLabel htmlFor="priority">Priority</FormLabel>
                 <Select
                   id="priority"
                   value={formData.priority}
                   onChange={handleInputChange}
                 >
-                  {/* Options for priority */}
+                  <option value={Priority.LIGHT}>{Priority.LIGHT}</option>
+                  <option value={Priority.NORMAL}>{Priority.NORMAL}</option>
+                  <option value={Priority.HIGHT}>{Priority.HIGHT}</option>
                 </Select>
               </Box>
             </Stack>
