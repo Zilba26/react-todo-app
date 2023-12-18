@@ -220,18 +220,6 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
                 </Select>
               </Box>
               <Box display="flex" flexDirection="column">
-                <FormLabel htmlFor="priority">Priority</FormLabel>
-                <Select
-                  id="priority"
-                  value={formData.priority}
-                  onChange={handleInputChange}
-                >
-                  <option value={Priority.LIGHT}>{Priority.LIGHT}</option>
-                  <option value={Priority.NORMAL}>{Priority.NORMAL}</option>
-                  <option value={Priority.HIGHT}>{Priority.HIGHT}</option>
-                </Select>
-              </Box>
-              <Box display="flex" flexDirection="column">
                 <FormLabel htmlFor="category">Category</FormLabel>
                 <Select
                   id="category"
@@ -243,6 +231,18 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
                       {category.name}
                     </option>
                   ))}
+                </Select>
+              </Box>
+              <Box display="flex" flexDirection="column">
+                <FormLabel htmlFor="priority">Priority</FormLabel>
+                <Select
+                  id="priority"
+                  value={formData.priority}
+                  onChange={handleInputChange}
+                >
+                  <option value={Priority.LIGHT}>{Priority.LIGHT}</option>
+                  <option value={Priority.NORMAL}>{Priority.NORMAL}</option>
+                  <option value={Priority.HIGHT}>{Priority.HIGHT}</option>
                 </Select>
               </Box>
             </Stack>
