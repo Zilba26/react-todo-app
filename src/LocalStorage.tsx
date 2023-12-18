@@ -1,11 +1,13 @@
 import { Category } from "./models/Category";
 import { Event } from "./models/Event";
 import { Task } from "./models/Task";
+import { Notification } from "./models/Notification";
 
 const ls = {
   events: "events",
   tasks: "tasks",
   categories: "categories",
+  notifications: "notifications",
 };
 
 const dateReviver = function (key: string, value: any) {
@@ -129,4 +131,39 @@ export function updateCategory(category: Category) {
     return c;
   });
   setCategories(newCategories);
+}
+
+// Categories
+
+export function getNotifications(): Notification[] {
+  return JSON.parse(localStorage.getItem(ls.categories) || "[]");
+}
+
+export function setNotifications(notifications: Notification[]) {
+  localStorage.setItem(ls.notifications, JSON.stringify(notifications));
+}
+
+export function addNotification(notification: Notification) {
+  const notifications = getNotifications();
+  notifications.push(notification);
+  setNotifications(notifications);
+}
+
+export function deleteNotification(id: number) {
+  const notifications = getNotifications();
+  const newNotifications = notifications.filter(
+    (notification: Notification) => notification.id !== id
+  );
+  setNotifications(newNotifications);
+}
+
+export function updateNotification(notification: Notification) {
+  const notifications = getNotifications();
+  const newNotifications = notifications.map((n: Notification) => {
+    if (n.id === notification.id) {
+      return notification;
+    }
+    return n;
+  });
+  setNotifications(newNotifications);
 }
