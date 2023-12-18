@@ -11,7 +11,7 @@ const ls = {
 
 const dateReviver = function (key: string, value: any) {
   //transform string value "2023-12-11T00:00:00.000Z" to Date object
-  if (typeof value === 'string') {
+  if (typeof value === "string") {
     const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/;
 
     if (dateRegex.test(value)) {
@@ -19,7 +19,7 @@ const dateReviver = function (key: string, value: any) {
     }
   }
   return value;
-}
+};
 
 // Tasks
 export function getTasks(): Task[] {
@@ -105,6 +105,17 @@ export function updateEvent(event: Event) {
 
 export function getCategories(): Category[] {
   return JSON.parse(localStorage.getItem(ls.categories) || "[]");
+}
+
+export function getCategoryByName(name: string): Category {
+  const categories = getCategories();
+  const category = categories.find(
+    (category: Category) => category.name === name
+  );
+  if (category === undefined) {
+    throw new Error(`Category with name ${name} not found`);
+  }
+  return category;
 }
 
 export function setCategories(categories: Category[]) {

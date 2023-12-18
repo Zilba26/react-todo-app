@@ -20,7 +20,7 @@ import React, { useState } from "react";
 import { AddIcon } from "@chakra-ui/icons";
 import { Task } from "../models/Task";
 import { Priority } from "../models/Priority";
-import { addTask } from "../LocalStorage";
+import { addTask, getCategories, getCategoryByName } from "../LocalStorage";
 
 interface CreateTaskProps {}
 
@@ -30,10 +30,14 @@ const CreateTask: React.FC<CreateTaskProps> = () => {
     name: "",
     description: "",
     date: "",
+    time: "",
+    category: "Work",
     priority: Priority.LIGHT,
   });
 
   const firstField = React.useRef(null);
+
+  const categories = getCategories();
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -45,20 +49,18 @@ const CreateTask: React.FC<CreateTaskProps> = () => {
   };
 
   const handleCreate = () => {
-    // Validate and handle the creation of the reminder
-    const { name, description, date, priority } = formData;
+    const { name, description, date, time, category, priority } = formData;
 
     // Validate the form data here
 
-    // Create a new reminder
     const newTask = new Task(
-      // You can generate a unique ID using a function or a library
-      // For simplicity, you can use the current timestamp as an ID
+      // Use the current timestamp as an ID
       Date.now(),
       name,
       description,
-      new Date(date),
-      priority as Priority
+      new Date(date + " " + time),
+      getCategoryByName(category),
+      priority
     );
 
     // Add the new reminder to the list
@@ -106,12 +108,34 @@ const CreateTask: React.FC<CreateTaskProps> = () => {
               </Box>
               <Box>
                 <FormLabel htmlFor="date">Date</FormLabel>
-                <Input
-                  type="date"
-                  id="date"
-                  value={formData.date}
+                <Box display="flex" flexDirection="column" gap="10px">
+                  <Input
+                    type="date"
+                    id="date"
+                    value={formData.date}
+                    onChange={handleInputChange}
+                  />
+                  <Input
+                    type="time"
+                    id="time"
+                    value={formData.time}
+                    onChange={handleInputChange}
+                  />
+                </Box>
+              </Box>
+              <Box>
+                <FormLabel htmlFor="category">Category</FormLabel>
+                <Select
+                  id="category"
+                  value={formData.category}
                   onChange={handleInputChange}
-                />
+                >
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.name}>
+                      {category.name}
+                    </option>
+                  ))}
+                </Select>
               </Box>
               <Box>
                 <FormLabel htmlFor="priority">Priority</FormLabel>
