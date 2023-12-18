@@ -58,15 +58,15 @@ export function getEvents(): Event[] {
   return JSON.parse(localStorage.getItem(ls.events) || "[]", dateReviver);
 }
 
-export function getEventsByDay(day: Date): Event[] {
-  const tasks = getEvents();
-  return tasks.filter((task: Event) => {
-    return (
-      task.startDate.getFullYear() === day.getFullYear() &&
-      task.startDate.getMonth() === day.getMonth() &&
-      task.startDate.getDate() === day.getDate()
-    );
-  });
+export function getEventsByDay(day: Date) : Event[] {
+    const tasks = getEvents();
+    return tasks
+    .filter((task: Event) => {
+        return task.startDate.getFullYear() === day.getFullYear() &&
+            task.startDate.getMonth() === day.getMonth() &&
+            task.startDate.getDate() === day.getDate();
+    });
+
 }
 
 export function setEvents(events: Event[]) {
