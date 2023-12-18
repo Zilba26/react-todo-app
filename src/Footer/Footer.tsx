@@ -4,7 +4,7 @@ import './Footer.css';
 interface FooterProps {}
 
 const Footer: FC<FooterProps> = () => (
-  <footer className="flex-center">
+  <footer className="footer flex-center">
     <p id="rights">All right reserved</p>
     <p id="names">LEBAUDY Basile - LEGENDRE Louis - LE DU Maxence</p>
   </footer>
