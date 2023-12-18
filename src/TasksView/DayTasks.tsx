@@ -67,6 +67,7 @@ const DayTasks: FC<DayTasksProps> = (props: DayTasksProps) => {
         defaultDate={props.day}
         defaultView="day"
         views={['day']}
+        dayLayoutAlgorithm={'no-overlap'}
         events={tasks.map((task) => {
           console.log(task);
           return new TaskEvent(task);
