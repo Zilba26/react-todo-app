@@ -1,11 +1,13 @@
 import { Category } from "./models/Category";
 import { Event } from "./models/Event";
 import { Task } from "./models/Task";
+import { Notification } from "./models/Notification";
 
 const ls = {
   events: "events",
   tasks: "tasks",
   categories: "categories",
+  notifications: "notifications",
 };
 
 const dateReviver = function (key: string, value: any) {
@@ -33,6 +35,17 @@ export function addTask(task: Task) {
   const tasks = getTasks();
   tasks.push(task);
   setTasks(tasks);
+
+  console.log("addTask", task);
+
+  addNotification(
+    new Notification(
+      getNotifications().length + 1,
+      "Tâche : " + task.name,
+      task,
+      undefined
+    )
+  );
 }
 
 export function deleteTask(id: number) {
@@ -58,13 +71,13 @@ export function getEvents(): Event[] {
   return JSON.parse(localStorage.getItem(ls.events) || "[]", dateReviver);
 }
 
-export function getEventsByDay(day: Date) : Event[] {
-    const tasks = getEvents();
-    return tasks
+export function getEventsByDay(day: Date): Event[] {
+  const tasks = getEvents();
+  return tasks
     .filter((task: Event) => {
-        return task.startDate.getFullYear() === day.getFullYear() &&
-            task.startDate.getMonth() === day.getMonth() &&
-            task.startDate.getDate() === day.getDate();
+      return task.startDate.getFullYear() === day.getFullYear() &&
+        task.startDate.getMonth() === day.getMonth() &&
+        task.startDate.getDate() === day.getDate();
     });
 
 }
@@ -77,6 +90,14 @@ export function addEvent(event: Event) {
   const events = getEvents();
   events.push(event);
   setEvents(events);
+  addNotification(
+    new Notification(
+      getNotifications().length + 1,
+      "Évènement : " + event.name,
+      undefined,
+      event
+    )
+  );
 }
 
 export function deleteEvent(id: number) {
@@ -140,4 +161,63 @@ export function updateCategory(category: Category) {
     return c;
   });
   setCategories(newCategories);
+}
+
+// Categories
+
+export function getNotifications(): Notification[] {
+  return JSON.parse(localStorage.getItem(ls.notifications) || "[]");
+}
+
+export function setNotifications(notifications: Notification[]) {
+  localStorage.setItem(ls.notifications, JSON.stringify(notifications));
+}
+
+export function addNotification(notification: Notification) {
+  const notifications = getNotifications();
+  notifications.push(notification);
+  setNotifications(notifications);
+}
+
+export function deleteNotification(id: number) {
+  const notifications = getNotifications();
+  const newNotifications = notifications.filter(
+    (notification: Notification) => notification.id !== id
+  );
+  setNotifications(newNotifications);
+}
+
+export function updateNotification(notification: Notification) {
+  const notifications = getNotifications();
+  const newNotifications = notifications.map((n: Notification) => {
+    if (n.id === notification.id) {
+      return notification;
+    }
+    return n;
+  });
+  setNotifications(newNotifications);
+}
+
+export function getCurrentNotifications(): string[][] {
+  const notifications: Notification[] = getNotifications();
+
+  const nofiticationString: string[][] = [];
+
+  for (let i = 0; i < notifications.length; i++) {
+    const notification = notifications[i];
+
+    const reminderDate = new Date(notification.reminder);
+
+    if (reminderDate < new Date()) {
+      const hours = String(reminderDate.getHours()).padStart(2, '0');
+      const minutes = String(reminderDate.getMinutes()).padStart(2, '0');
+      const day = String(reminderDate.getDate()).padStart(2, '0');
+      const month = String(reminderDate.getMonth() + 1).padStart(2, '0');
+      const year = reminderDate.getFullYear();
+
+      nofiticationString[i] = [notification.id.toString(), `${notification.name} à ${hours}:${minutes} le ${day}/${month}/${year}`];
+    }
+  }
+
+  return nofiticationString;
 }
