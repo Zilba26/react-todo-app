@@ -41,7 +41,7 @@ export function addTask(task: Task) {
   addNotification(
     new Notification(
       getNotifications().length + 1,
-      "Notification tâche : " + task.name,
+      "Tâche : " + task.name,
       task,
       undefined
     )
@@ -71,13 +71,13 @@ export function getEvents(): Event[] {
   return JSON.parse(localStorage.getItem(ls.events) || "[]", dateReviver);
 }
 
-export function getEventsByDay(day: Date) : Event[] {
-    const tasks = getEvents();
-    return tasks
+export function getEventsByDay(day: Date): Event[] {
+  const tasks = getEvents();
+  return tasks
     .filter((task: Event) => {
-        return task.startDate.getFullYear() === day.getFullYear() &&
-            task.startDate.getMonth() === day.getMonth() &&
-            task.startDate.getDate() === day.getDate();
+      return task.startDate.getFullYear() === day.getFullYear() &&
+        task.startDate.getMonth() === day.getMonth() &&
+        task.startDate.getDate() === day.getDate();
     });
 
 }
@@ -93,7 +93,7 @@ export function addEvent(event: Event) {
   addNotification(
     new Notification(
       getNotifications().length + 1,
-      "Notification évènement : " + event.name,
+      "Évènement : " + event.name,
       undefined,
       event
     )
@@ -196,4 +196,28 @@ export function updateNotification(notification: Notification) {
     return n;
   });
   setNotifications(newNotifications);
+}
+
+export function getCurrentNotifications(): string[][] {
+  const notifications: Notification[] = getNotifications();
+
+  const nofiticationString: string[][] = [];
+
+  for (let i = 0; i < notifications.length; i++) {
+    const notification = notifications[i];
+
+    const reminderDate = new Date(notification.reminder);
+
+    if (reminderDate < new Date()) {
+      const hours = String(reminderDate.getHours()).padStart(2, '0');
+      const minutes = String(reminderDate.getMinutes()).padStart(2, '0');
+      const day = String(reminderDate.getDate()).padStart(2, '0');
+      const month = String(reminderDate.getMonth() + 1).padStart(2, '0');
+      const year = reminderDate.getFullYear();
+
+      nofiticationString[i] = [notification.id.toString(), `${notification.name} à ${hours}:${minutes} le ${day}/${month}/${year}`];
+    }
+  }
+
+  return nofiticationString;
 }

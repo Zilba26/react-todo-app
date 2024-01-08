@@ -9,21 +9,27 @@ header {
   justify-content: space-between;
 }
 
-#logoBox,
-#bellBox,
-#moonBox {
+#logoBox {
   display: flex;
   justify-content: center;
   width: 7%;
 }
 
+#bellBox,
+#moonBox {
+  display: flex;
+  justify-content: center;
+  width: 4%;
+}
+
+#numberNotif {
+  color: white;
+  font-size: 10px;
+}
+
 #logoBox img {
   height: 40px;
   width: 40px;
-}
-
-#bellBox {
-  justify-content: end;
 }
 
 #bellBox .chakra-icon,
@@ -44,7 +50,7 @@ header {
   display: flex;
   justify-content: start;
   margin-left: 20px;
-  width: 79%;
+  width: 85%;
 }
 
 #titleBox h2 {
