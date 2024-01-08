@@ -1,10 +1,12 @@
-import { FC, useEffect } from 'react'
-import { Box, useColorModeValue } from '@chakra-ui/react'
-import { getEventsByDay } from '../LocalStorage'
+import { FC, useEffect, useState } from 'react'
+import { Box, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Popover, PopoverBody, PopoverContent, PopoverHeader, PopoverTrigger, useColorModeValue, useDisclosure } from '@chakra-ui/react'
+import { deleteEvent as localStorageDeleteEvent, getEventsByDay } from '../LocalStorage'
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import { Event } from '../models/Event';
+import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { getPriorityColor } from '../models/Priority';
 
 const userLocale = window.navigator.language || 'en-US';
 moment.locale(userLocale);
@@ -34,6 +36,10 @@ const DayTasks: FC<DayTasksProps> = (props: DayTasksProps) => {
 
   const backgroundColor = useColorModeValue("#eaf6ff", "var(--chakra-colors-chakra-body-bg)");
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [eventSelected, setEventSelected] = useState<TaskEvent | null>(null);
+
   useEffect(() => {
     const calendarHeader = document.querySelector('.rbc-time-header-content .rbc-allday-cell .rbc-row-bg > div') as HTMLElement;
     if (calendarHeader) {
@@ -49,6 +55,18 @@ const DayTasks: FC<DayTasksProps> = (props: DayTasksProps) => {
     return null
   }
 
+  const setTriggerButtonPosition = (event: React.MouseEvent<HTMLElement>) => {
+    const triggerButton = document.getElementsByClassName('trigger-button')[0] as HTMLElement;
+    triggerButton.style.top = `${event.clientY}px`;
+    triggerButton.style.left = `${event.clientX}px`;
+  }
+
+  const deleteEvent = () => {
+    localStorageDeleteEvent(eventSelected!.event.id);
+    setEventSelected(null);
+    onClose();
+  }
+
   const tasks = getEventsByDay(props.day);
   const min = Math.min(...tasks.map((task) => task.startDate.getTime()));
   const max = Math.max(...tasks.map((task) => task.endDate.getTime()));
@@ -57,7 +75,7 @@ const DayTasks: FC<DayTasksProps> = (props: DayTasksProps) => {
   const maxHour = new Date(max).getHours() > 19 ? new Date(max) : new Date(0,0,0,19);
 
   return (
-    <Box flex={1}>
+    <Box flex={1} onClick={setTriggerButtonPosition}>
       <Calendar
         localizer={localizer}
         min={minHour}
@@ -69,6 +87,11 @@ const DayTasks: FC<DayTasksProps> = (props: DayTasksProps) => {
         defaultView="day"
         views={['day']}
         dayLayoutAlgorithm={'no-overlap'}
+        onSelectEvent={(event) => {
+          setEventSelected(event);
+          const button = document.getElementsByClassName('trigger-button')[0] as HTMLElement;
+          button.click();
+        }}
         events={tasks.map((task) => {
           return new TaskEvent(task);
         })}
@@ -95,6 +118,51 @@ const DayTasks: FC<DayTasksProps> = (props: DayTasksProps) => {
           }
         }}
       />
+
+      <Popover>
+        <PopoverTrigger>
+          <Button pos="absolute" className='trigger-button' visibility="hidden" w="1px" h="1px"></Button>
+        </PopoverTrigger>
+        <PopoverContent>
+          <PopoverHeader>
+            {eventSelected?.title}
+            <Box display="flex" gap="12px">
+              <EditIcon cursor="pointer"></EditIcon>
+              <DeleteIcon cursor="pointer" onClick={onOpen}></DeleteIcon>
+            </Box>
+          </PopoverHeader>
+          <PopoverBody>
+            {eventSelected?.event.description}
+            <Box display="flex" gap="12px">
+              <Box bgColor={eventSelected?.event.category.color} fontSize={12} borderRadius="100%" px="6px" py="2px">
+                {eventSelected?.event.category.name}
+              </Box>
+              <Box bgColor={getPriorityColor(eventSelected?.event.priority)} fontSize={12} borderRadius="100%" px="8px">
+                {eventSelected?.event.priority}
+              </Box>
+            </Box>
+          </PopoverBody>
+        </PopoverContent>
+      </Popover>
+
+      <Modal isOpen={isOpen} onClose={onClose} isCentered autoFocus={false}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>{eventSelected?.title}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            Êtes-vous sûr de supprimer cet évènement ?
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme='blue' mr={3} onClick={onClose}>
+              Close
+            </Button>
+            <Button colorScheme='red' onClick={deleteEvent}>
+              Supprimer
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   )
 }
