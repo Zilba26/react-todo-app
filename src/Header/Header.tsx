@@ -5,12 +5,18 @@ import "./Header.css";
 import ShowNotif from "../ShowNotif/ShowNotif";
 import { getCurrentNotifications } from "../LocalStorage";
 
-interface HeaderProps {}
+interface HeaderProps { }
 
 const Header: FC<HeaderProps> = () => {
   const { toggleColorMode } = useColorMode();
 
-  const notificationNumber = getCurrentNotifications().length;
+  const notifications = getCurrentNotifications();
+
+  // Filtrer les sous-tableaux qui ont exactement deux chaînes non nulles
+  const validNotifications = notifications.filter(innerArray => innerArray !== null && innerArray.length === 2 && innerArray.every(str => str !== null));
+
+  // Compter le nombre d'éléments restants
+  const notificationNumber = validNotifications.length;
 
   return (
     <header className="Header">
