@@ -52,7 +52,7 @@ const ToDoList: React.FC<ToDoListProps> = () => {
   }
 
   return (
-    <Card>
+    <Card margin="30px">
       <CardHeader>
         <Heading as="h2" size="lg" padding="15px">
           {" "}
