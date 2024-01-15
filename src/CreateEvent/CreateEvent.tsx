@@ -1,4 +1,3 @@
-import { AddIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -9,49 +8,47 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
+  FormControl,
   FormLabel,
   Input,
   Select,
-  Stack,
   Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { PropsWithChildren } from "react";
 import {
   addEvent,
   getCategories,
   getCategoryByName,
   setCategories,
+  updateEvent,
 } from "../LocalStorage";
 import { Event } from "../models/Event";
 import { Priority } from "../models/Priority";
+import { useForm } from "react-hook-form";
 
-interface CreateEventProps {}
+interface CreateEventProps extends PropsWithChildren {
+  state: "create" | "edit";
+}
 
-const CreateEvent: React.FC<CreateEventProps> = () => {
+const CreateEvent: React.FC<CreateEventProps> = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    startDate: "",
-    startTime: "",
-    endDate: "",
-    endTime: "",
-    reminder: "", // Default to 'None'
-    category: "Work", // Default to 'Work'
-    priority: Priority.LIGHT, // Default to 'Light'
-  });
+
+  const {
+    handleSubmit,
+    register,
+  } = useForm();
 
   setCategories([
     {
       id: 1,
       name: "Work",
-      color: "rgb(0, 0, 255)", // RGB.BLUE,
+      color: "rgb(0, 255, 0)", // RGB.BLUE,
     },
     {
       id: 2,
       name: "Personal",
-      color: "rgb(0, 0, 255)", // RGB.RED,
+      color: "rgb(255, 0, 0)", // RGB.RED,
     },
     {
       id: 3,
@@ -64,20 +61,11 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
 
   const categories = getCategories();
 
-  const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => {
-    const { id, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [id]: value }));
-  };
-
   const getReminderDate = (date: Date, reminder: number) => {
     return new Date(date.getTime() - reminder * 60000);
   };
 
-  const handleCreate = () => {
+  const submit = (formData: any) => {
     // Validate and handle the creation of the event
     const {
       name,
@@ -90,8 +78,6 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
       category,
       priority,
     } = formData;
-
-    // Validate the form data here
 
     const newEvent = new Event(
       // Current timestamp as an ID
@@ -108,31 +94,22 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
       priority
     );
 
-    // Add the new event to the list
-    addEvent(newEvent);
+    if (props.state === "edit") {
+      updateEvent(newEvent);
+    } else if (props.state === "create") {
+      addEvent(newEvent);
+    } else {
+      throw new Error("Invalid state");
+    }
 
-    // Close the drawer
     onClose();
-
-    // Reset the form data
-    setFormData({
-      name: "",
-      description: "",
-      startDate: "",
-      startTime: "",
-      endDate: "",
-      endTime: "",
-      reminder: "", // Default to 'None'
-      category: "Work", // Default to 'Work'
-      priority: Priority.LIGHT, // Default to 'Light'
-    });
   };
 
   return (
     <>
-      <Button leftIcon={<AddIcon />} colorScheme="teal" onClick={onOpen}>
-        Create Event
-      </Button>
+      <Box onClick={onOpen}>
+        {props.children}
+      </Box>
       <Drawer
         isOpen={isOpen}
         placement="right"
@@ -148,68 +125,65 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
           </DrawerHeader>
 
           <DrawerBody>
-            <Stack spacing="7px">
-              <Box display="flex" flexDirection="column">
-                <FormLabel htmlFor="name">Name</FormLabel>
+            <form id="event-form" style={{ display: "flex", flexDirection: "column", gap: "8px" }} onSubmit={handleSubmit(submit)}>
+              <FormControl display="flex" flexDirection="column" isRequired>
+                <FormLabel>Name</FormLabel>
                 <Input
-                  ref={firstField}
-                  id="name"
-                  placeholder="Please enter a name"
-                  value={formData.name}
-                  onChange={handleInputChange}
+                  placeholder="Entrer un nom"
+                  {...register('name', {
+                    required: 'This is required',
+                  })}
                 />
-              </Box>
-              <Box display="flex" flexDirection="column">
-                <FormLabel htmlFor="description">Description</FormLabel>
+              </FormControl>
+              <FormControl display="flex" flexDirection="column">
+                <FormLabel>Description</FormLabel>
                 <Textarea
-                  id="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
                   height="20px"
+                  {...register('description', {})}
                 />
-              </Box>
-              <Box display="flex" flexDirection="column">
-                <FormLabel htmlFor="startDate">Start Date</FormLabel>
+              </FormControl>
+              <FormControl display="flex" flexDirection="column" isRequired>
+                <FormLabel>Start Date</FormLabel>
                 <Box display="flex" flexDirection="row" gap="10px">
                   <Input
                     type="date"
-                    id="startDate"
-                    value={formData.startDate}
-                    onChange={handleInputChange}
+                    {...register('startDate', {
+                      required: 'This is required',
+                    })}
                   />
                   <Input
                     type="time"
-                    id="startTime"
-                    value={formData.startTime}
-                    onChange={handleInputChange}
+                    {...register('startTime', {
+                      required: 'This is required',
+                    })}
                   />
                 </Box>
-              </Box>
-              <Box display="flex" flexDirection="column">
-                <FormLabel htmlFor="endDate">End Date</FormLabel>
+              </FormControl>
+              <FormControl display="flex" flexDirection="column" isRequired>
+                <FormLabel>End Date</FormLabel>
                 <Box display="flex" flexDirection="row" gap="10px">
                   <Input
                     type="date"
-                    id="endDate"
-                    value={formData.endDate}
-                    onChange={handleInputChange}
+                    {...register('endDate', {
+                      required: 'This is required',
+                    })}
                   />
                   <Input
                     type="time"
-                    id="endTime"
-                    value={formData.endTime}
-                    onChange={handleInputChange}
+                    {...register('endTime', {
+                      required: 'This is required',
+                    })}
                   />
                 </Box>
-              </Box>
-              <Box display="flex" flexDirection="column">
-                <FormLabel htmlFor="reminder">Reminder</FormLabel>
+              </FormControl>
+              <FormControl display="flex" flexDirection="column" isRequired>
+                <FormLabel>Reminder</FormLabel>
                 <Select
-                  id="reminder"
-                  value={formData.reminder}
-                  onChange={handleInputChange}
+                  {...register('reminder', {
+                    required: 'This is required',
+                  })}
                 >
-                  <option value="">None</option>
+                  <option value="none">None</option>
                   <option value="15">15 minutes before</option>
                   <option value="30">30 minutes before</option>
                   <option value="60">1 hour before</option>
@@ -218,13 +192,13 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
                   <option value="2880">2 days before</option>
                   <option value="10080">1 week before</option>
                 </Select>
-              </Box>
-              <Box display="flex" flexDirection="column">
-                <FormLabel htmlFor="category">Category</FormLabel>
+              </FormControl>
+              <FormControl display="flex" flexDirection="column" isRequired>
+                <FormLabel>Category</FormLabel>
                 <Select
-                  id="category"
-                  value={formData.category}
-                  onChange={handleInputChange}
+                  {...register('category', {
+                    required: 'This is required',
+                  })}
                 >
                   {categories.map((category) => (
                     <option key={category.id} value={category.name}>
@@ -232,20 +206,20 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
                     </option>
                   ))}
                 </Select>
-              </Box>
-              <Box display="flex" flexDirection="column">
-                <FormLabel htmlFor="priority">Priority</FormLabel>
+              </FormControl>
+              <FormControl display="flex" flexDirection="column" isRequired>
+                <FormLabel>Priority</FormLabel>
                 <Select
-                  id="priority"
-                  value={formData.priority}
-                  onChange={handleInputChange}
+                  {...register('priority', {
+                    required: 'This is required',
+                  })}
                 >
                   <option value={Priority.LIGHT}>{Priority.LIGHT}</option>
                   <option value={Priority.NORMAL}>{Priority.NORMAL}</option>
                   <option value={Priority.HIGHT}>{Priority.HIGHT}</option>
                 </Select>
-              </Box>
-            </Stack>
+              </FormControl>
+            </form>
           </DrawerBody>
 
           <DrawerFooter
@@ -257,7 +231,7 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
             <Button variant="outline" mr={3} onClick={onClose}>
               Cancel
             </Button>
-            <Button colorScheme="blue" onClick={handleCreate}>
+            <Button colorScheme="blue" type="submit" form="event-form">
               Create
             </Button>
           </DrawerFooter>
