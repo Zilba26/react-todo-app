@@ -86,7 +86,7 @@ export function deleteEvent(id: number) {
 export function updateEvent(event: Event) {
   const events = getEvents();
   const newEvents = events.map((e: Event) => {
-    if (e.id === event.id) {
+    if (e.id == event.id) {
       return event;
     }
     return e;

@@ -14,20 +14,24 @@ interface CreateEventProps extends PropsWithChildren {
 const CreateEvent: React.FC<CreateEventProps> = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const getReminderByDate = (event: Event) => {
+    if (event == null || event.reminder == null) return "none";
+    const diff = event.startDate.getTime() - event.reminder.getTime();
+    const minutes = diff / 60000;
+    return minutes.toString();
+  }
+
   const {
     handleSubmit,
     register,
     formState: { errors },
+    reset
   } = useForm();
 
   const firstField = React.useRef(null);
 
   if (props.state === "edit" && !props.eventToUpdate) {
-    console.error("Event to update is undefined");
     return null;
-  }
-  if (props.state === "create" && props.eventToUpdate) {
-    console.warn("Event to update is not used in create mode");
   }
 
   const categories = getCategories();
@@ -40,7 +44,7 @@ const CreateEvent: React.FC<CreateEventProps> = (props) => {
     const {name, description, eventDate, startTime, endTime, reminder, category, priority} = formData;
 
     const newEvent = new Event(
-      Date.now(), name, description,
+      (props.eventToUpdate ? props.eventToUpdate.id : Date.now()), name, description,
       new Date(eventDate + " " + startTime),new Date(eventDate + " " + endTime),
       getReminderDate(
         new Date(eventDate + " " + startTime),
@@ -60,9 +64,14 @@ const CreateEvent: React.FC<CreateEventProps> = (props) => {
     onClose();
   };
 
+  const openModal = () => {
+    onOpen();
+    reset();
+  };
+
   return (
     <>
-      <Box onClick={onOpen}>
+      <Box onClick={openModal} className="flex-center">
         {props.children}
       </Box>
       <Drawer
@@ -76,7 +85,7 @@ const CreateEvent: React.FC<CreateEventProps> = (props) => {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader borderBottomWidth="1px">
-            Create a new Event
+            {props.state == "create" ? "Create a new Event" : "Update an Event"}
           </DrawerHeader>
 
           <DrawerBody>
@@ -87,6 +96,7 @@ const CreateEvent: React.FC<CreateEventProps> = (props) => {
                   placeholder="Entrer un nom"
                   {...register('name', {
                     required: 'This is required',
+                    value: props.state === "edit" ? props.eventToUpdate?.name : ""
                   })}
                 />
               </FormControl>
@@ -94,7 +104,9 @@ const CreateEvent: React.FC<CreateEventProps> = (props) => {
                 <FormLabel>Description</FormLabel>
                 <Textarea
                   height="20px"
-                  {...register('description', {})}
+                  {...register('description', {
+                    value: props.state === "edit" ? props.eventToUpdate?.description : ""
+                  })}
                 />
               </FormControl>
               <FormControl display="flex" flexDirection="column" isRequired>
@@ -104,6 +116,7 @@ const CreateEvent: React.FC<CreateEventProps> = (props) => {
                     type="date"
                     {...register('eventDate', {
                       required: 'This is required',
+                      value: props.state === "edit" ? props.eventToUpdate?.startDate.toISOString().split('T')[0] : ""
                     })}
                   />
                 </Box>
@@ -115,6 +128,7 @@ const CreateEvent: React.FC<CreateEventProps> = (props) => {
                     type="time"
                     {...register('startTime', {
                       required: 'This is required',
+                      value: props.state === "edit" ? props.eventToUpdate?.startDate.toISOString().split('T')[1].split('.')[0] : "",
                       validate: (value, formValues) => {
                         const startTime = new Date(formValues.eventDate + " " + value);
                         const endTime = new Date(formValues.eventDate + " " + formValues.endTime);
@@ -129,6 +143,7 @@ const CreateEvent: React.FC<CreateEventProps> = (props) => {
                     type="time"
                     {...register('endTime', {
                       required: 'This is required',
+                      value: props.state === "edit" ? props.eventToUpdate?.endDate.toISOString().split('T')[1].split('.')[0] : "",
                     })}
                   />
                 </Box>
@@ -140,6 +155,7 @@ const CreateEvent: React.FC<CreateEventProps> = (props) => {
                 <Select
                   {...register('reminder', {
                     required: 'This is required',
+                    value: props.state === "edit" ? getReminderByDate(props.eventToUpdate!) : ""
                   })}
                 >
                   <option value="none">None</option>
@@ -157,6 +173,7 @@ const CreateEvent: React.FC<CreateEventProps> = (props) => {
                 <Select
                   {...register('category', {
                     required: 'This is required',
+                    value: props.state === "edit" ? props.eventToUpdate?.category.name : ""
                   })}
                 >
                   {categories.map((category) => (
@@ -171,6 +188,7 @@ const CreateEvent: React.FC<CreateEventProps> = (props) => {
                 <Select
                   {...register('priority', {
                     required: 'This is required',
+                    value: props.state === "edit" ? props.eventToUpdate?.priority : ""
                   })}
                 >
                   <option value={Priority.LIGHT}>{Priority.LIGHT}</option>
@@ -191,7 +209,7 @@ const CreateEvent: React.FC<CreateEventProps> = (props) => {
               Cancel
             </Button>
             <Button colorScheme="blue" type="submit" form="event-form">
-              Create
+              {props.state == "create" ? "Create" : "Update"}
             </Button>
           </DrawerFooter>
         </DrawerContent>

@@ -7,6 +7,7 @@ import moment from 'moment';
 import { Event } from '../models/Event';
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { getPriorityColor } from '../models/Priority';
+import CreateEvent from '../CreateEvent/CreateEvent';
 
 const userLocale = window.navigator.language || 'en-US';
 moment.locale(userLocale);
@@ -126,8 +127,10 @@ const DayTasks: FC<DayTasksProps> = (props: DayTasksProps) => {
         <PopoverContent>
           <PopoverHeader>
             {eventSelected?.title}
-            <Box display="flex" gap="12px">
-              <EditIcon cursor="pointer"></EditIcon>
+            <Box className='flex-center' gap="12px">
+              <CreateEvent state='edit' eventToUpdate={eventSelected?.event}>
+                <EditIcon cursor="pointer"></EditIcon>
+              </CreateEvent>
               <DeleteIcon cursor="pointer" onClick={onOpen}></DeleteIcon>
             </Box>
           </PopoverHeader>
