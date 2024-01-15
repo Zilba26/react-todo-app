@@ -93,7 +93,7 @@ const TaskDrawer: React.FC<TaskDrawerProps> = (props: TaskDrawerProps) => {
 
     const newTask = new Task(
       // Use the current timestamp as an ID
-      Date.now(),
+      props.task ? props.task.id : Date.now(),
       name,
       description,
       new Date(date + " " + time),
@@ -136,7 +136,7 @@ const TaskDrawer: React.FC<TaskDrawerProps> = (props: TaskDrawerProps) => {
               onSubmit={handleSubmit(submit)}
             >
               <FormControl display="flex" flexDirection="column" isRequired>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Nom</FormLabel>
                 <Input
                   placeholder="Entrer un nom"
                   {...register("name", {
@@ -177,7 +177,7 @@ const TaskDrawer: React.FC<TaskDrawerProps> = (props: TaskDrawerProps) => {
                 </Box>
               </FormControl>
               <FormControl display="flex" flexDirection="column" isRequired>
-                <FormLabel>Category</FormLabel>
+                <FormLabel>Catégorie</FormLabel>
                 <Select
                   {...register("category", {
                     required: "This is required",
@@ -194,7 +194,7 @@ const TaskDrawer: React.FC<TaskDrawerProps> = (props: TaskDrawerProps) => {
                 </Select>
               </FormControl>
               <FormControl display="flex" flexDirection="column" isRequired>
-                <FormLabel>Priority</FormLabel>
+                <FormLabel>Priorité</FormLabel>
                 <Select
                   {...register("priority", {
                     required: "This is required",

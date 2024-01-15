@@ -27,12 +27,12 @@ import { Priority } from "../models/Priority";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 
-interface CreateEventProps extends PropsWithChildren {
+interface EventDrawerProps extends PropsWithChildren {
   state: "create" | "edit";
   eventToUpdate?: Event;
 }
 
-const CreateEvent: React.FC<CreateEventProps> = (props) => {
+const EventDrawer: React.FC<EventDrawerProps> = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const getReminderByDate = (event: Event) => {
@@ -129,7 +129,7 @@ const CreateEvent: React.FC<CreateEventProps> = (props) => {
               onSubmit={handleSubmit(submit)}
             >
               <FormControl display="flex" flexDirection="column" isRequired>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Nom</FormLabel>
                 <Input
                   placeholder="Entrer un nom"
                   {...register("name", {
@@ -152,7 +152,7 @@ const CreateEvent: React.FC<CreateEventProps> = (props) => {
                 />
               </FormControl>
               <FormControl display="flex" flexDirection="column" isRequired>
-                <FormLabel>Event Date</FormLabel>
+                <FormLabel>Date de l'évènement</FormLabel>
                 <Box display="flex" flexDirection="row" gap="10px">
                   <Input
                     type="date"
@@ -169,7 +169,7 @@ const CreateEvent: React.FC<CreateEventProps> = (props) => {
                 </Box>
               </FormControl>
               <FormControl display="flex" flexDirection="column" isRequired>
-                <FormLabel>Event time</FormLabel>
+                <FormLabel>Heure de l'évènement</FormLabel>
                 <Box display="flex" flexDirection="row" gap="10px">
                   <Input
                     type="time"
@@ -240,7 +240,7 @@ const CreateEvent: React.FC<CreateEventProps> = (props) => {
                 </Select>
               </FormControl>
               <FormControl display="flex" flexDirection="column" isRequired>
-                <FormLabel>Category</FormLabel>
+                <FormLabel>Catégorie</FormLabel>
                 <Select
                   {...register("category", {
                     required: "This is required",
@@ -295,4 +295,4 @@ const CreateEvent: React.FC<CreateEventProps> = (props) => {
   );
 };
 
-export default CreateEvent;
+export default EventDrawer;

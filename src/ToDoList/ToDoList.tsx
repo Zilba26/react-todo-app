@@ -12,10 +12,10 @@ import {
   Heading,
 } from "@chakra-ui/react";
 import React from "react";
-import CreateEvent from "../CreateEvent/CreateEvent";
+import CreateEvent from "../EventDrawer/EventDrawer";
 import TaskDrawer from "../TaskDrawer/TaskDrawer";
 import { Task } from "../models/Task";
-import { getTasks } from "../LocalStorage";
+import { deleteTask, getTasks } from "../LocalStorage";
 import {
   AddIcon,
   CalendarIcon,
@@ -23,6 +23,7 @@ import {
   EditIcon,
   TimeIcon,
 } from "@chakra-ui/icons";
+import "./ToDoList.css";
 
 interface ToDoListProps {}
 
@@ -45,6 +46,11 @@ const ToDoList: React.FC<ToDoListProps> = () => {
     return { date: dateFormatee, heure: heureFormatee };
   }
 
+  function removeTask(task: Task) {
+    deleteTask(task.id);
+    window.location.reload();
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -55,13 +61,21 @@ const ToDoList: React.FC<ToDoListProps> = () => {
         {/* Assuming TaskDrawer and CreateEvent are your components for adding tasks and events */}
         <Box display="flex" flexDirection="row" justifyContent="space-evenly">
           <TaskDrawer state="create">
-            <Button leftIcon={<AddIcon />} colorScheme="teal">
-              Create Task
+            <Button
+              leftIcon={<AddIcon />}
+              colorScheme="teal"
+              className="hoverable-button"
+            >
+              Créer une tâche
             </Button>
           </TaskDrawer>
           <CreateEvent state="create">
-            <Button leftIcon={<AddIcon />} colorScheme="teal">
-              Create Event
+            <Button
+              leftIcon={<AddIcon />}
+              colorScheme="teal"
+              className="hoverable-button"
+            >
+              Créer un événement
             </Button>
           </CreateEvent>
         </Box>
@@ -71,18 +85,19 @@ const ToDoList: React.FC<ToDoListProps> = () => {
         <Accordion allowToggle>
           {tasks.map((task) => (
             <AccordionItem key={task.id}>
-              <h2>
-                <AccordionButton gap="7px">
-                  <Box as="span" flex="1" textAlign="left">
-                    {task.name}
-                  </Box>
-                  <AccordionIcon />
-                  <TaskDrawer state="edit" task={task}>
-                    <EditIcon />
-                  </TaskDrawer>
-                  <DeleteIcon />
-                </AccordionButton>
-              </h2>
+              <AccordionButton gap="7px">
+                <Box as="span" flex="1" textAlign="left">
+                  {task.name}
+                </Box>
+                <AccordionIcon />
+                <TaskDrawer state="edit" task={task}>
+                  <EditIcon className="hoverable-icon" />
+                </TaskDrawer>
+                <DeleteIcon
+                  onClick={() => removeTask(task)}
+                  className="hoverable-icon"
+                />
+              </AccordionButton>
               <AccordionPanel pb={4}>
                 <Box
                   display="flex"
