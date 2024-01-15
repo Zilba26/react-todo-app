@@ -93,7 +93,7 @@ const TaskDrawer: React.FC<TaskDrawerProps> = (props: TaskDrawerProps) => {
 
     const newTask = new Task(
       // Use the current timestamp as an ID
-      Date.now(),
+      props.task ? props.task.id : Date.now(),
       name,
       description,
       new Date(date + " " + time),

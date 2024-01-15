@@ -12,10 +12,10 @@ import {
   Heading,
 } from "@chakra-ui/react";
 import React from "react";
-import CreateEvent from "../CreateEvent/CreateEvent";
+import CreateEvent from "../EventDrawer/EventDrawer";
 import TaskDrawer from "../TaskDrawer/TaskDrawer";
 import { Task } from "../models/Task";
-import { getTasks } from "../LocalStorage";
+import { deleteTask, getTasks } from "../LocalStorage";
 import {
   AddIcon,
   CalendarIcon,
@@ -45,6 +45,11 @@ const ToDoList: React.FC<ToDoListProps> = () => {
     return { date: dateFormatee, heure: heureFormatee };
   }
 
+  function removeTask(task: Task) {
+    deleteTask(task.id);
+    window.location.reload();
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -56,12 +61,12 @@ const ToDoList: React.FC<ToDoListProps> = () => {
         <Box display="flex" flexDirection="row" justifyContent="space-evenly">
           <TaskDrawer state="create">
             <Button leftIcon={<AddIcon />} colorScheme="teal">
-              Create Task
+              Créer une tâche
             </Button>
           </TaskDrawer>
           <CreateEvent state="create">
             <Button leftIcon={<AddIcon />} colorScheme="teal">
-              Create Event
+              Créer un événement
             </Button>
           </CreateEvent>
         </Box>
@@ -80,7 +85,7 @@ const ToDoList: React.FC<ToDoListProps> = () => {
                   <TaskDrawer state="edit" task={task}>
                     <EditIcon />
                   </TaskDrawer>
-                  <DeleteIcon />
+                  <DeleteIcon onClick={() => removeTask(task)} />
                 </AccordionButton>
               </h2>
               <AccordionPanel pb={4}>
