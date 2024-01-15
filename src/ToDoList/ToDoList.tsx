@@ -5,6 +5,7 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
+  Button,
   Card,
   CardBody,
   CardHeader,
@@ -15,8 +16,9 @@ import CreateEvent from "../CreateEvent/CreateEvent";
 import CreateTask from "../CreateTask/CreateTask";
 import { Task } from "../models/Task";
 import { getTasks } from "../LocalStorage";
+import { AddIcon } from "@chakra-ui/icons";
 
-interface ToDoListProps {}
+interface ToDoListProps { }
 
 const ToDoList: React.FC<ToDoListProps> = () => {
   const tasks: Task[] = getTasks();
@@ -28,7 +30,11 @@ const ToDoList: React.FC<ToDoListProps> = () => {
         {/* Assuming CreateTask and CreateEvent are your components for adding tasks and events */}
         <Box display="flex" flexDirection="row" justifyContent="space-evenly">
           <CreateTask />
-          <CreateEvent />
+          <CreateEvent state="create">
+            <Button leftIcon={<AddIcon />} colorScheme="teal">
+              Create Event
+            </Button>
+          </CreateEvent>
         </Box>
       </CardHeader>
 

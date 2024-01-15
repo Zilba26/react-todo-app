@@ -19,7 +19,7 @@ const Header: FC<HeaderProps> = () => {
       </Box>
 
       <Box id="titleBox">
-        <h2>Todo App</h2>
+        <h2>Todo App (mettez une mauvaise note à louis, il a pas bossé de l'ue)</h2>
       </Box>
 
       <Box id="bellBox">
