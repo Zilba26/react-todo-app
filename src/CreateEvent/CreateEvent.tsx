@@ -38,19 +38,19 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
     endDate: "",
     endTime: "",
     reminder: "", // Default to 'None'
-    category: "Work", // Default to 'Work'
+    category: "Travail", // Default to 'Work'
     priority: Priority.LIGHT, // Default to 'Light'
   });
 
   setCategories([
     {
       id: 1,
-      name: "Work",
+      name: "Travail",
       color: "rgb(0, 0, 255)", // RGB.BLUE,
     },
     {
       id: 2,
-      name: "Personal",
+      name: "Personnel",
       color: "rgb(0, 0, 255)", // RGB.RED,
     },
     {
@@ -131,7 +131,7 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
   return (
     <>
       <Button leftIcon={<AddIcon />} colorScheme="teal" onClick={onOpen}>
-        Create Event
+        Créer un évènement
       </Button>
       <Drawer
         isOpen={isOpen}
@@ -144,13 +144,13 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader borderBottomWidth="1px">
-            Create a new Event
+            Créer un évènement
           </DrawerHeader>
 
           <DrawerBody>
             <Stack spacing="7px">
               <Box display="flex" flexDirection="column">
-                <FormLabel htmlFor="name">Name</FormLabel>
+                <FormLabel htmlFor="name">Nom</FormLabel>
                 <Input
                   ref={firstField}
                   id="name"
@@ -169,7 +169,7 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
                 />
               </Box>
               <Box display="flex" flexDirection="column">
-                <FormLabel htmlFor="startDate">Start Date</FormLabel>
+                <FormLabel htmlFor="startDate">Date de début</FormLabel>
                 <Box display="flex" flexDirection="row" gap="10px">
                   <Input
                     type="date"
@@ -186,7 +186,7 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
                 </Box>
               </Box>
               <Box display="flex" flexDirection="column">
-                <FormLabel htmlFor="endDate">End Date</FormLabel>
+                <FormLabel htmlFor="endDate">Date de Fin</FormLabel>
                 <Box display="flex" flexDirection="row" gap="10px">
                   <Input
                     type="date"
@@ -203,24 +203,24 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
                 </Box>
               </Box>
               <Box display="flex" flexDirection="column">
-                <FormLabel htmlFor="reminder">Reminder</FormLabel>
+                <FormLabel htmlFor="reminder">Rappel</FormLabel>
                 <Select
                   id="reminder"
                   value={formData.reminder}
                   onChange={handleInputChange}
                 >
-                  <option value="">None</option>
-                  <option value="15">15 minutes before</option>
-                  <option value="30">30 minutes before</option>
-                  <option value="60">1 hour before</option>
-                  <option value="120">2 hours before</option>
-                  <option value="1440">1 day before</option>
-                  <option value="2880">2 days before</option>
-                  <option value="10080">1 week before</option>
+                  <option value="">Aucun</option>
+                  <option value="15">15 minutes avant</option>
+                  <option value="30">30 minutes avant</option>
+                  <option value="60">1 heure avant</option>
+                  <option value="120">2 heures avant</option>
+                  <option value="1440">1 jour avant</option>
+                  <option value="2880">2 jours avant</option>
+                  <option value="10080">1 semaine avant</option>
                 </Select>
               </Box>
               <Box display="flex" flexDirection="column">
-                <FormLabel htmlFor="category">Category</FormLabel>
+                <FormLabel htmlFor="category">Catégorie</FormLabel>
                 <Select
                   id="category"
                   value={formData.category}
@@ -234,7 +234,7 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
                 </Select>
               </Box>
               <Box display="flex" flexDirection="column">
-                <FormLabel htmlFor="priority">Priority</FormLabel>
+                <FormLabel htmlFor="priority">Priorité</FormLabel>
                 <Select
                   id="priority"
                   value={formData.priority}

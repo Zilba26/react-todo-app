@@ -5,6 +5,7 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
+  Button,
   Card,
   CardBody,
   CardHeader,
@@ -12,22 +13,52 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import CreateEvent from "../CreateEvent/CreateEvent";
-import CreateTask from "../CreateTask/CreateTask";
+import TaskDrawer from "../TaskDrawer/TaskDrawer";
 import { Task } from "../models/Task";
 import { getTasks } from "../LocalStorage";
+import {
+  AddIcon,
+  CalendarIcon,
+  DeleteIcon,
+  EditIcon,
+  TimeIcon,
+} from "@chakra-ui/icons";
 
 interface ToDoListProps {}
 
 const ToDoList: React.FC<ToDoListProps> = () => {
   const tasks: Task[] = getTasks();
 
+  function formaterDateEtHeure(date: Date): {
+    date: string;
+    heure: string;
+  } {
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+
+    const dateFormatee = `${day}/${month}/${year}`;
+    const heureFormatee = `${hours}:${minutes}`;
+
+    return { date: dateFormatee, heure: heureFormatee };
+  }
+
   return (
     <Card>
       <CardHeader>
-        <Heading size="md">TODO List</Heading>
-        {/* Assuming CreateTask and CreateEvent are your components for adding tasks and events */}
+        <Heading as="h2" size="lg" padding="15px">
+          {" "}
+          Liste des tâches à faire{" "}
+        </Heading>
+        {/* Assuming TaskDrawer and CreateEvent are your components for adding tasks and events */}
         <Box display="flex" flexDirection="row" justifyContent="space-evenly">
-          <CreateTask />
+          <TaskDrawer state="create">
+            <Button leftIcon={<AddIcon />} colorScheme="teal">
+              Create Task
+            </Button>
+          </TaskDrawer>
           <CreateEvent />
         </Box>
       </CardHeader>
@@ -37,17 +68,39 @@ const ToDoList: React.FC<ToDoListProps> = () => {
           {tasks.map((task) => (
             <AccordionItem key={task.id}>
               <h2>
-                <AccordionButton>
+                <AccordionButton gap="7px">
                   <Box as="span" flex="1" textAlign="left">
                     {task.name}
                   </Box>
                   <AccordionIcon />
+                  <TaskDrawer state="edit" task={task}>
+                    <EditIcon />
+                  </TaskDrawer>
+                  <DeleteIcon />
                 </AccordionButton>
               </h2>
               <AccordionPanel pb={4}>
-                <p>Date: {new Date(task.date).toDateString()}</p>
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  gap="5px"
+                  alignItems="center"
+                >
+                  <CalendarIcon />
+                  <p>Date: {formaterDateEtHeure(new Date(task.date)).date}</p>
+                </Box>
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  gap="5px"
+                  alignItems="center"
+                >
+                  <TimeIcon />
+                  <p>Heure: {formaterDateEtHeure(new Date(task.date)).heure}</p>
+                </Box>
+
                 <p>Description: {task.description}</p>
-                <p>Priority: {task.priority}</p>
+                <p>Priorité: {task.priority}</p>
                 {/* Add any additional details you want to display */}
               </AccordionPanel>
             </AccordionItem>

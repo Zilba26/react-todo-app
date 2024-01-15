@@ -27,6 +27,15 @@ export function getTasks(): Task[] {
   return JSON.parse(localStorage.getItem(ls.tasks) || "[]");
 }
 
+export function getTaskById(id: number): Task {
+  const tasks = getTasks();
+  const task = tasks.find((task: Task) => task.id === id);
+  if (task === undefined) {
+    throw new Error(`Task with id ${id} not found`);
+  }
+  return task;
+}
+
 export function setTasks(tasks: Task[]) {
   localStorage.setItem(ls.tasks, JSON.stringify(tasks));
 }
