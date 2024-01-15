@@ -136,6 +136,7 @@ const DayTasks: FC<DayTasksProps> = (props: DayTasksProps) => {
           </PopoverHeader>
           <PopoverBody>
             {eventSelected?.event.description}
+            <Box h="8px"></Box>
             <Box display="flex" gap="12px">
               <Box bgColor={eventSelected?.event.category.color} fontSize={12} borderRadius="100%" px="6px" py="2px">
                 {eventSelected?.event.category.name}
