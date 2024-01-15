@@ -12,12 +12,11 @@
     margin-right: 2rem;
 }
 
-.close-icon,
-.close-icon-duplica {
+.box-close-icon .chakra-icon {
     padding: 2px;
     visibility: hidden;
-    height: 15px;
-    width: 15px;
+    height: 15px !important;
+    width: 15px !important;
 }
 
 .notification-box:hover .close-icon {
@@ -34,4 +33,12 @@
     display: flex;
     justify-content: center;
     width: 35px;
+}
+
+div section button {
+    visibility: hidden;
+}
+
+div section {
+    margin: 1rem;
 }
