@@ -29,6 +29,7 @@ export function getTasks(): Task[] {
 
 export function setTasks(tasks: Task[]) {
   localStorage.setItem(ls.tasks, JSON.stringify(tasks));
+  window.location.reload();
 }
 
 export function addTask(task: Task) {
@@ -84,6 +85,7 @@ export function getEventsByDay(day: Date): Event[] {
 
 export function setEvents(events: Event[]) {
   localStorage.setItem(ls.events, JSON.stringify(events));
+  window.location.reload();
 }
 
 export function addEvent(event: Event) {
@@ -136,6 +138,7 @@ export function getCategoryByName(name: string): Category {
 
 export function setCategories(categories: Category[]) {
   localStorage.setItem(ls.categories, JSON.stringify(categories));
+  // window.location.reload();
 }
 
 export function addCategory(category: Category) {
@@ -171,6 +174,7 @@ export function getNotifications(): Notification[] {
 
 export function setNotifications(notifications: Notification[]) {
   localStorage.setItem(ls.notifications, JSON.stringify(notifications));
+  window.location.reload();
 }
 
 export function addNotification(notification: Notification) {
