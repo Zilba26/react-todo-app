@@ -1,4 +1,3 @@
-import { AddIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -9,130 +8,106 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
+  FormControl,
   FormLabel,
   Input,
   Select,
-  Stack,
   Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { PropsWithChildren } from "react";
 import {
   addEvent,
   getCategories,
   getCategoryByName,
-  setCategories,
+  updateEvent,
 } from "../LocalStorage";
 import { Event } from "../models/Event";
 import { Priority } from "../models/Priority";
+import { useForm } from "react-hook-form";
+import { ErrorMessage } from "@hookform/error-message";
 
-interface CreateEventProps {}
+interface CreateEventProps extends PropsWithChildren {
+  state: "create" | "edit";
+  eventToUpdate?: Event;
+}
 
-const CreateEvent: React.FC<CreateEventProps> = () => {
+const CreateEvent: React.FC<CreateEventProps> = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    startDate: "",
-    startTime: "",
-    endDate: "",
-    endTime: "",
-    reminder: "", // Default to 'None'
-    category: "Travail", // Default to 'Work'
-    priority: Priority.LIGHT, // Default to 'Light'
-  });
 
-  setCategories([
-    {
-      id: 1,
-      name: "Travail",
-      color: "rgb(0, 0, 255)", // RGB.BLUE,
-    },
-    {
-      id: 2,
-      name: "Personnel",
-      color: "rgb(0, 0, 255)", // RGB.RED,
-    },
-    {
-      id: 3,
-      name: "Secret",
-      color: "rgb(0, 0, 255)", // RGB.GREEN,
-    },
-  ]);
+  const getReminderByDate = (event: Event) => {
+    if (event == null || event.reminder == null) return "none";
+    const diff = event.startDate.getTime() - event.reminder.getTime();
+    const minutes = diff / 60000;
+    return minutes.toString();
+  };
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+    reset,
+  } = useForm();
 
   const firstField = React.useRef(null);
 
-  const categories = getCategories();
+  if (props.state === "edit" && !props.eventToUpdate) {
+    return null;
+  }
 
-  const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => {
-    const { id, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [id]: value }));
-  };
+  const categories = getCategories();
 
   const getReminderDate = (date: Date, reminder: number) => {
     return new Date(date.getTime() - reminder * 60000);
   };
 
-  const handleCreate = () => {
-    // Validate and handle the creation of the event
+  const submit = (formData: any) => {
     const {
       name,
       description,
-      startDate,
+      eventDate,
       startTime,
-      endDate,
       endTime,
       reminder,
       category,
       priority,
     } = formData;
 
-    // Validate the form data here
-
     const newEvent = new Event(
-      // Current timestamp as an ID
-      Date.now(),
+      props.eventToUpdate ? props.eventToUpdate.id : Date.now(),
       name,
       description,
-      new Date(startDate + " " + startTime),
-      new Date(endDate + " " + endTime),
+      new Date(eventDate + " " + startTime),
+      new Date(eventDate + " " + endTime),
       getReminderDate(
-        new Date(startDate + " " + startTime),
+        new Date(eventDate + " " + startTime),
         parseInt(reminder)
       ),
       getCategoryByName(category),
       priority
     );
 
-    // Add the new event to the list
-    addEvent(newEvent);
+    if (props.state === "edit") {
+      updateEvent(newEvent);
+    } else if (props.state === "create") {
+      addEvent(newEvent);
+    } else {
+      throw new Error("Invalid state");
+    }
 
-    // Close the drawer
     onClose();
+  };
 
-    // Reset the form data
-    setFormData({
-      name: "",
-      description: "",
-      startDate: "",
-      startTime: "",
-      endDate: "",
-      endTime: "",
-      reminder: "", // Default to 'None'
-      category: "Work", // Default to 'Work'
-      priority: Priority.LIGHT, // Default to 'Light'
-    });
+  const openModal = () => {
+    onOpen();
+    reset();
   };
 
   return (
     <>
-      <Button leftIcon={<AddIcon />} colorScheme="teal" onClick={onOpen}>
-        Créer un évènement
-      </Button>
+      <Box onClick={openModal} className="flex-center">
+        {props.children}
+      </Box>
       <Drawer
         isOpen={isOpen}
         placement="right"
@@ -144,72 +119,117 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader borderBottomWidth="1px">
-            Créer un évènement
+            {props.state == "create" ? "Create a new Event" : "Update an Event"}
           </DrawerHeader>
 
           <DrawerBody>
-            <Stack spacing="7px">
-              <Box display="flex" flexDirection="column">
-                <FormLabel htmlFor="name">Nom</FormLabel>
+            <form
+              id="event-form"
+              style={{ display: "flex", flexDirection: "column", gap: "8px" }}
+              onSubmit={handleSubmit(submit)}
+            >
+              <FormControl display="flex" flexDirection="column" isRequired>
+                <FormLabel>Name</FormLabel>
                 <Input
-                  ref={firstField}
-                  id="name"
-                  placeholder="Please enter a name"
-                  value={formData.name}
-                  onChange={handleInputChange}
+                  placeholder="Entrer un nom"
+                  {...register("name", {
+                    required: "This is required",
+                    value:
+                      props.state === "edit" ? props.eventToUpdate?.name : "",
+                  })}
                 />
-              </Box>
-              <Box display="flex" flexDirection="column">
-                <FormLabel htmlFor="description">Description</FormLabel>
+              </FormControl>
+              <FormControl display="flex" flexDirection="column">
+                <FormLabel>Description</FormLabel>
                 <Textarea
-                  id="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
                   height="20px"
+                  {...register("description", {
+                    value:
+                      props.state === "edit"
+                        ? props.eventToUpdate?.description
+                        : "",
+                  })}
                 />
-              </Box>
-              <Box display="flex" flexDirection="column">
-                <FormLabel htmlFor="startDate">Date de début</FormLabel>
+              </FormControl>
+              <FormControl display="flex" flexDirection="column" isRequired>
+                <FormLabel>Event Date</FormLabel>
                 <Box display="flex" flexDirection="row" gap="10px">
                   <Input
                     type="date"
-                    id="startDate"
-                    value={formData.startDate}
-                    onChange={handleInputChange}
-                  />
-                  <Input
-                    type="time"
-                    id="startTime"
-                    value={formData.startTime}
-                    onChange={handleInputChange}
+                    {...register("eventDate", {
+                      required: "This is required",
+                      value:
+                        props.state === "edit"
+                          ? props.eventToUpdate?.startDate
+                              .toISOString()
+                              .split("T")[0]
+                          : "",
+                    })}
                   />
                 </Box>
-              </Box>
-              <Box display="flex" flexDirection="column">
-                <FormLabel htmlFor="endDate">Date de Fin</FormLabel>
+              </FormControl>
+              <FormControl display="flex" flexDirection="column" isRequired>
+                <FormLabel>Event time</FormLabel>
                 <Box display="flex" flexDirection="row" gap="10px">
                   <Input
-                    type="date"
-                    id="endDate"
-                    value={formData.endDate}
-                    onChange={handleInputChange}
+                    type="time"
+                    {...register("startTime", {
+                      required: "This is required",
+                      value:
+                        props.state === "edit"
+                          ? props.eventToUpdate?.startDate
+                              .toISOString()
+                              .split("T")[1]
+                              .split(".")[0]
+                          : "",
+                      validate: (value, formValues) => {
+                        const startTime = new Date(
+                          formValues.eventDate + " " + value
+                        );
+                        const endTime = new Date(
+                          formValues.eventDate + " " + formValues.endTime
+                        );
+                        if (startTime > endTime) {
+                          return "Start time must be avant end time";
+                        }
+                        return true;
+                      },
+                    })}
                   />
                   <Input
                     type="time"
-                    id="endTime"
-                    value={formData.endTime}
-                    onChange={handleInputChange}
+                    {...register("endTime", {
+                      required: "This is required",
+                      value:
+                        props.state === "edit"
+                          ? props.eventToUpdate?.endDate
+                              .toISOString()
+                              .split("T")[1]
+                              .split(".")[0]
+                          : "",
+                    })}
                   />
                 </Box>
-              </Box>
-              <Box display="flex" flexDirection="column">
-                <FormLabel htmlFor="reminder">Rappel</FormLabel>
+                <ErrorMessage
+                  name="startTime"
+                  errors={errors}
+                  render={({ message }) => (
+                    <p style={{ color: "red" }}>{message}</p>
+                  )}
+                />
+              </FormControl>
+              <FormControl display="flex" flexDirection="column" isRequired>
+                <FormLabel>Rappel</FormLabel>
                 <Select
-                  id="reminder"
-                  value={formData.reminder}
-                  onChange={handleInputChange}
+                  {...register("reminder", {
+                    required: "This is required",
+                    value:
+                      props.state === "edit"
+                        ? getReminderByDate(props.eventToUpdate!)
+                        : "",
+                  })}
                 >
-                  <option value="">Aucun</option>
+                  <option value="none">Aucun</option>
                   <option value="15">15 minutes avant</option>
                   <option value="30">30 minutes avant</option>
                   <option value="60">1 heure avant</option>
@@ -218,13 +238,17 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
                   <option value="2880">2 jours avant</option>
                   <option value="10080">1 semaine avant</option>
                 </Select>
-              </Box>
-              <Box display="flex" flexDirection="column">
-                <FormLabel htmlFor="category">Catégorie</FormLabel>
+              </FormControl>
+              <FormControl display="flex" flexDirection="column" isRequired>
+                <FormLabel>Category</FormLabel>
                 <Select
-                  id="category"
-                  value={formData.category}
-                  onChange={handleInputChange}
+                  {...register("category", {
+                    required: "This is required",
+                    value:
+                      props.state === "edit"
+                        ? props.eventToUpdate?.category.name
+                        : "",
+                  })}
                 >
                   {categories.map((category) => (
                     <option key={category.id} value={category.name}>
@@ -232,20 +256,24 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
                     </option>
                   ))}
                 </Select>
-              </Box>
-              <Box display="flex" flexDirection="column">
-                <FormLabel htmlFor="priority">Priorité</FormLabel>
+              </FormControl>
+              <FormControl display="flex" flexDirection="column" isRequired>
+                <FormLabel>Priorité</FormLabel>
                 <Select
-                  id="priority"
-                  value={formData.priority}
-                  onChange={handleInputChange}
+                  {...register("priority", {
+                    required: "This is required",
+                    value:
+                      props.state === "edit"
+                        ? props.eventToUpdate?.priority
+                        : "",
+                  })}
                 >
                   <option value={Priority.LIGHT}>{Priority.LIGHT}</option>
                   <option value={Priority.NORMAL}>{Priority.NORMAL}</option>
                   <option value={Priority.HIGHT}>{Priority.HIGHT}</option>
                 </Select>
-              </Box>
-            </Stack>
+              </FormControl>
+            </form>
           </DrawerBody>
 
           <DrawerFooter
@@ -255,10 +283,10 @@ const CreateEvent: React.FC<CreateEventProps> = () => {
             justifyContent="space-evenly"
           >
             <Button variant="outline" mr={3} onClick={onClose}>
-              Cancel
+              Annuler
             </Button>
-            <Button colorScheme="blue" onClick={handleCreate}>
-              Create
+            <Button colorScheme="blue" type="submit" form="event-form">
+              {props.state == "create" ? "Create" : "Update"}
             </Button>
           </DrawerFooter>
         </DrawerContent>

@@ -38,6 +38,7 @@ export function getTaskById(id: number): Task {
 
 export function setTasks(tasks: Task[]) {
   localStorage.setItem(ls.tasks, JSON.stringify(tasks));
+  window.location.reload();
 }
 
 export function addTask(task: Task) {
@@ -80,19 +81,18 @@ export function getEvents(): Event[] {
   return JSON.parse(localStorage.getItem(ls.events) || "[]", dateReviver);
 }
 
-export function getEventsByDay(day: Date): Event[] {
-  const tasks = getEvents();
-  return tasks
-    .filter((task: Event) => {
-      return task.startDate.getFullYear() === day.getFullYear() &&
-        task.startDate.getMonth() === day.getMonth() &&
-        task.startDate.getDate() === day.getDate();
+export function getEventsByDay(day: Date) : Event[] {
+    const tasks = getEvents();
+    const dayStart = new Date(day.getFullYear(), day.getMonth(), day.getDate(), 0, 0, 0);
+    const dayEnd = new Date(day.getFullYear(), day.getMonth(), day.getDate(), 23, 59, 59);
+    return tasks.filter((task) => {
+        return task.startDate.getTime() <= dayEnd.getTime() && task.endDate.getTime() >= dayStart.getTime();
     });
-
 }
 
 export function setEvents(events: Event[]) {
   localStorage.setItem(ls.events, JSON.stringify(events));
+  window.location.reload();
 }
 
 export function addEvent(event: Event) {
@@ -117,11 +117,11 @@ export function deleteEvent(id: number) {
 
 export function updateEvent(event: Event) {
   const events = getEvents();
-  const newEvents = events.map((t: Event) => {
-    if (t.id === event.id) {
+  const newEvents = events.map((e: Event) => {
+    if (e.id == event.id) {
       return event;
     }
-    return t;
+    return e;
   });
   setEvents(newEvents);
 }
@@ -145,6 +145,7 @@ export function getCategoryByName(name: string): Category {
 
 export function setCategories(categories: Category[]) {
   localStorage.setItem(ls.categories, JSON.stringify(categories));
+  // window.location.reload();
 }
 
 export function addCategory(category: Category) {
@@ -180,6 +181,7 @@ export function getNotifications(): Notification[] {
 
 export function setNotifications(notifications: Notification[]) {
   localStorage.setItem(ls.notifications, JSON.stringify(notifications));
+  window.location.reload();
 }
 
 export function addNotification(notification: Notification) {

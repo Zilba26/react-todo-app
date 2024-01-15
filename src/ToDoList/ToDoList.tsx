@@ -59,7 +59,11 @@ const ToDoList: React.FC<ToDoListProps> = () => {
               Create Task
             </Button>
           </TaskDrawer>
-          <CreateEvent />
+          <CreateEvent state="create">
+            <Button leftIcon={<AddIcon />} colorScheme="teal">
+              Create Event
+            </Button>
+          </CreateEvent>
         </Box>
       </CardHeader>
 

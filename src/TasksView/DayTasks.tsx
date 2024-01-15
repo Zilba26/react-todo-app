@@ -7,6 +7,7 @@ import moment from 'moment';
 import { Event } from '../models/Event';
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { getPriorityColor } from '../models/Priority';
+import CreateEvent from '../CreateEvent/CreateEvent';
 
 const userLocale = window.navigator.language || 'en-US';
 moment.locale(userLocale);
@@ -52,7 +53,7 @@ const DayTasks: FC<DayTasksProps> = (props: DayTasksProps) => {
   },[props.day])
 
   if (!props.day) {
-    return null
+    return null;
   }
 
   const setTriggerButtonPosition = (event: React.MouseEvent<HTMLElement>) => {
@@ -126,13 +127,16 @@ const DayTasks: FC<DayTasksProps> = (props: DayTasksProps) => {
         <PopoverContent>
           <PopoverHeader>
             {eventSelected?.title}
-            <Box display="flex" gap="12px">
-              <EditIcon cursor="pointer"></EditIcon>
+            <Box className='flex-center' gap="12px">
+              <CreateEvent state='edit' eventToUpdate={eventSelected?.event}>
+                <EditIcon cursor="pointer"></EditIcon>
+              </CreateEvent>
               <DeleteIcon cursor="pointer" onClick={onOpen}></DeleteIcon>
             </Box>
           </PopoverHeader>
           <PopoverBody>
             {eventSelected?.event.description}
+            <Box h="8px"></Box>
             <Box display="flex" gap="12px">
               <Box bgColor={eventSelected?.event.category.color} fontSize={12} borderRadius="100%" px="6px" py="2px">
                 {eventSelected?.event.category.name}
