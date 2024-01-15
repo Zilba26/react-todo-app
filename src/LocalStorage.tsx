@@ -60,13 +60,11 @@ export function getEvents(): Event[] {
 
 export function getEventsByDay(day: Date) : Event[] {
     const tasks = getEvents();
-    return tasks
-    .filter((task: Event) => {
-        return task.startDate.getFullYear() === day.getFullYear() &&
-            task.startDate.getMonth() === day.getMonth() &&
-            task.startDate.getDate() === day.getDate();
+    const dayStart = new Date(day.getFullYear(), day.getMonth(), day.getDate(), 0, 0, 0);
+    const dayEnd = new Date(day.getFullYear(), day.getMonth(), day.getDate(), 23, 59, 59);
+    return tasks.filter((task) => {
+        return task.startDate.getTime() <= dayEnd.getTime() && task.endDate.getTime() >= dayStart.getTime();
     });
-
 }
 
 export function setEvents(events: Event[]) {
@@ -87,11 +85,11 @@ export function deleteEvent(id: number) {
 
 export function updateEvent(event: Event) {
   const events = getEvents();
-  const newEvents = events.map((t: Event) => {
-    if (t.id === event.id) {
+  const newEvents = events.map((e: Event) => {
+    if (e.id === event.id) {
       return event;
     }
-    return t;
+    return e;
   });
   setEvents(newEvents);
 }

@@ -52,7 +52,7 @@ const DayTasks: FC<DayTasksProps> = (props: DayTasksProps) => {
   },[props.day])
 
   if (!props.day) {
-    return null
+    return null;
   }
 
   const setTriggerButtonPosition = (event: React.MouseEvent<HTMLElement>) => {

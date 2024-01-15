@@ -1,34 +1,14 @@
-import {
-  Box,
-  Button,
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  FormControl,
-  FormLabel,
-  Input,
-  Select,
-  Textarea,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormControl, FormLabel, Input, Select, Textarea, useDisclosure} from "@chakra-ui/react";
 import React, { PropsWithChildren } from "react";
-import {
-  addEvent,
-  getCategories,
-  getCategoryByName,
-  setCategories,
-  updateEvent,
-} from "../LocalStorage";
+import { addEvent, getCategories, getCategoryByName, updateEvent} from "../LocalStorage";
 import { Event } from "../models/Event";
 import { Priority } from "../models/Priority";
 import { useForm } from "react-hook-form";
+import { ErrorMessage } from "@hookform/error-message";
 
 interface CreateEventProps extends PropsWithChildren {
   state: "create" | "edit";
+  eventToUpdate?: Event;
 }
 
 const CreateEvent: React.FC<CreateEventProps> = (props) => {
@@ -37,27 +17,18 @@ const CreateEvent: React.FC<CreateEventProps> = (props) => {
   const {
     handleSubmit,
     register,
+    formState: { errors },
   } = useForm();
 
-  setCategories([
-    {
-      id: 1,
-      name: "Work",
-      color: "rgb(0, 255, 0)", // RGB.BLUE,
-    },
-    {
-      id: 2,
-      name: "Personal",
-      color: "rgb(255, 0, 0)", // RGB.RED,
-    },
-    {
-      id: 3,
-      name: "Secret",
-      color: "rgb(0, 0, 255)", // RGB.GREEN,
-    },
-  ]);
-
   const firstField = React.useRef(null);
+
+  if (props.state === "edit" && !props.eventToUpdate) {
+    console.error("Event to update is undefined");
+    return null;
+  }
+  if (props.state === "create" && props.eventToUpdate) {
+    console.warn("Event to update is not used in create mode");
+  }
 
   const categories = getCategories();
 
@@ -66,32 +37,16 @@ const CreateEvent: React.FC<CreateEventProps> = (props) => {
   };
 
   const submit = (formData: any) => {
-    // Validate and handle the creation of the event
-    const {
-      name,
-      description,
-      startDate,
-      startTime,
-      endDate,
-      endTime,
-      reminder,
-      category,
-      priority,
-    } = formData;
+    const {name, description, eventDate, startTime, endTime, reminder, category, priority} = formData;
 
     const newEvent = new Event(
-      // Current timestamp as an ID
-      Date.now(),
-      name,
-      description,
-      new Date(startDate + " " + startTime),
-      new Date(endDate + " " + endTime),
+      Date.now(), name, description,
+      new Date(eventDate + " " + startTime),new Date(eventDate + " " + endTime),
       getReminderDate(
-        new Date(startDate + " " + startTime),
+        new Date(eventDate + " " + startTime),
         parseInt(reminder)
       ),
-      getCategoryByName(category),
-      priority
+      getCategoryByName(category),priority
     );
 
     if (props.state === "edit") {
@@ -143,29 +98,31 @@ const CreateEvent: React.FC<CreateEventProps> = (props) => {
                 />
               </FormControl>
               <FormControl display="flex" flexDirection="column" isRequired>
-                <FormLabel>Start Date</FormLabel>
+                <FormLabel>Event Date</FormLabel>
                 <Box display="flex" flexDirection="row" gap="10px">
                   <Input
                     type="date"
-                    {...register('startDate', {
-                      required: 'This is required',
-                    })}
-                  />
-                  <Input
-                    type="time"
-                    {...register('startTime', {
+                    {...register('eventDate', {
                       required: 'This is required',
                     })}
                   />
                 </Box>
               </FormControl>
               <FormControl display="flex" flexDirection="column" isRequired>
-                <FormLabel>End Date</FormLabel>
+                <FormLabel>Event time</FormLabel>
                 <Box display="flex" flexDirection="row" gap="10px">
                   <Input
-                    type="date"
-                    {...register('endDate', {
+                    type="time"
+                    {...register('startTime', {
                       required: 'This is required',
+                      validate: (value, formValues) => {
+                        const startTime = new Date(formValues.eventDate + " " + value);
+                        const endTime = new Date(formValues.eventDate + " " + formValues.endTime);
+                        if (startTime > endTime) {
+                          return "Start time must be before end time";
+                        }
+                        return true;
+                      }
                     })}
                   />
                   <Input
@@ -175,6 +132,8 @@ const CreateEvent: React.FC<CreateEventProps> = (props) => {
                     })}
                   />
                 </Box>
+                <ErrorMessage name="startTime" errors={errors}
+                  render={({ message }) => <p style={{color: "red"}}>{message}</p>}/>
               </FormControl>
               <FormControl display="flex" flexDirection="column" isRequired>
                 <FormLabel>Reminder</FormLabel>
