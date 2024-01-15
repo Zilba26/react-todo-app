@@ -1,12 +1,16 @@
-import { BellIcon, MoonIcon } from "@chakra-ui/icons";
+import { MoonIcon } from "@chakra-ui/icons";
 import { Box, useColorMode } from "@chakra-ui/react";
 import { FC } from "react";
 import "./Header.css";
+import ShowNotif from "../ShowNotif/ShowNotif";
+import { getCurrentNotifications } from "../LocalStorage";
 
 interface HeaderProps {}
 
 const Header: FC<HeaderProps> = () => {
   const { toggleColorMode } = useColorMode();
+
+  const notificationNumber = getCurrentNotifications().length;
 
   return (
     <header className="Header">
@@ -19,7 +23,10 @@ const Header: FC<HeaderProps> = () => {
       </Box>
 
       <Box id="bellBox">
-        <BellIcon></BellIcon>
+        <ShowNotif />
+        <Box id="notifBox">
+          <p id="numberNotif" style={{ display: notificationNumber === 0 ? 'none' : 'block' }}>{notificationNumber}</p>
+        </Box>
       </Box>
 
       <Box id="moonBox">
