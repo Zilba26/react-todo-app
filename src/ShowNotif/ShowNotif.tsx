@@ -28,25 +28,26 @@ const ShowNotif: React.FC<ShowNotifProps> = () => {
                 <PopoverArrow />
                 <PopoverCloseButton />
                 <PopoverBody>
-                    {nofiticationString.map((notification, index) => (
-                        <Box key={`notification-${index}`} className="notification-box">
-
-                            <Box className="box-close-icon">
-                                <CloseIcon className="close-icon-duplica" />
+                    {nofiticationString.length === 0 ? (
+                        <p>Aucune notification</p>
+                    ) : (
+                        nofiticationString.map((notification, index) => (
+                            <Box key={`notification-${index}`} className="notification-box">
+                                <Box className="box-close-icon">
+                                    <CloseIcon className="close-icon-duplica" />
+                                </Box>
+                                <p className="notification-text">{notification[1]}</p>
+                                <Box className="box-close-icon">
+                                    <CloseIcon
+                                        className="close-icon"
+                                        onClick={() => deleteNotification(parseInt(notification[0]))}
+                                    />
+                                </Box>
                             </Box>
-
-                            <p className="notification-text">{notification[1]}</p>
-
-                            <Box className="box-close-icon">
-                                <CloseIcon
-                                    className="close-icon"
-                                    onClick={() => deleteNotification(parseInt(notification[0]))}
-                                />
-                            </Box>
-
-                        </Box>
-                    ))}
+                        ))
+                    )}
                 </PopoverBody>
+
             </PopoverContent>
         </Popover>
     );
