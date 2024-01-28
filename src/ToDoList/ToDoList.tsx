@@ -5,7 +5,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { addCategory, deleteCategory, getCategories, getEvents, getTasks, updateCategory, deleteTask } from "../LocalStorage";
-import { AddIcon, CalendarIcon, CheckIcon, DeleteIcon, EditIcon, TimeIcon } from "@chakra-ui/icons";
+import { AddIcon, CalendarIcon, CheckIcon, DeleteIcon, EditIcon, SettingsIcon, TimeIcon } from "@chakra-ui/icons";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import { Category, Color } from "../models/Category";
@@ -92,9 +92,11 @@ const ToDoList: React.FC<ToDoListProps> = () => {
       const category = categories.find((category) => category.id === selectedEditIndex)!;
       (document.getElementById("edit-category-name") as HTMLInputElement).value = category.name;
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedEditIndex]);
 
   const closeModal = () => {
+    onClose();
     window.location.reload();
   }
 
@@ -131,6 +133,9 @@ const ToDoList: React.FC<ToDoListProps> = () => {
             <TaskDrawer state="create">
               <Button leftIcon={<AddIcon />} colorScheme="teal" className="hoverable-button">Créer une tâche</Button>
             </TaskDrawer>
+            <Button onClick={onOpen} leftIcon={<SettingsIcon />} colorScheme="teal">
+              Gérér Catégories
+            </Button>
             <CreateEvent state="create">
               <Button leftIcon={<AddIcon />} colorScheme="teal" className="hoverable-button">Créer un événement</Button>
             </CreateEvent>
