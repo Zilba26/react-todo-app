@@ -2,6 +2,7 @@ import { Category } from "./Category";
 import { Priority } from "./Priority";
 
 export class Event {
+  
   id: number;
   name: string;
   description: string;
@@ -29,5 +30,18 @@ export class Event {
     this.reminder = reminder;
     this.category = category;
     this.priority = priority;
+  }
+
+  toJson(): any {
+    return {
+      id: this.id,
+      name: this.name,
+      description: this.description,
+      startDate: this.startDate,
+      endDate: this.endDate,
+      reminder: this.reminder,
+      category: this.category,
+      priority: this.priority,
+    };
   }
 }

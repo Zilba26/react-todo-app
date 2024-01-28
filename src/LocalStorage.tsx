@@ -24,7 +24,10 @@ const dateReviver = function (key: string, value: any) {
 
 // Tasks
 export function getTasks(): Task[] {
-  return JSON.parse(localStorage.getItem(ls.tasks) || "[]");
+  const tasks = JSON.parse(localStorage.getItem(ls.tasks) || "[]");
+  return tasks.map((task: any) => {
+    task.category = getCategory(task.category);
+  });
 }
 
 export function setTasks(tasks: Task[]) {
@@ -34,10 +37,10 @@ export function setTasks(tasks: Task[]) {
 
 export function addTask(task: Task) {
   const tasks = getTasks();
+  const jsonTask = task.toJson();
+  jsonTask.category = task.category.id;
   tasks.push(task);
   setTasks(tasks);
-
-  console.log("addTask", task);
 
   addNotification(
     new Notification(
@@ -59,7 +62,9 @@ export function updateTask(task: Task) {
   const tasks = getTasks();
   const newTasks = tasks.map((r: Task) => {
     if (r.id === task.id) {
-      return task;
+      const jsonTask = task.toJson();
+      jsonTask.category = task.category.id;
+      return jsonTask;
     }
     return r;
   });
@@ -69,7 +74,11 @@ export function updateTask(task: Task) {
 // Events
 
 export function getEvents(): Event[] {
-  return JSON.parse(localStorage.getItem(ls.events) || "[]", dateReviver);
+  const events = JSON.parse(localStorage.getItem(ls.events) || "[]", dateReviver);
+  return events.map((event: any) => {
+    event.category = getCategory(event.category);
+    return event;
+  });
 }
 
 export function getEventsByDay(day: Date) : Event[] {
@@ -88,7 +97,9 @@ export function setEvents(events: Event[]) {
 
 export function addEvent(event: Event) {
   const events = getEvents();
-  events.push(event);
+  const jsonEvent = event.toJson();
+  jsonEvent.category = event.category.id;
+  events.push(jsonEvent);
   setEvents(events);
   addNotification(
     new Notification(
@@ -110,7 +121,9 @@ export function updateEvent(event: Event) {
   const events = getEvents();
   const newEvents = events.map((e: Event) => {
     if (e.id == event.id) {
-      return event;
+      const jsonEvent = event.toJson();
+      jsonEvent.category = event.category.id;
+      return jsonEvent;
     }
     return e;
   });
@@ -121,6 +134,15 @@ export function updateEvent(event: Event) {
 
 export function getCategories(): Category[] {
   return JSON.parse(localStorage.getItem(ls.categories) || "[]");
+}
+
+export function getCategory(id: number): Category {
+  const categories = getCategories();
+  const category = categories.find((category: Category) => category.id === id);
+  if (category === undefined) {
+    throw new Error(`Category with id ${id} not found`);
+  }
+  return category;
 }
 
 export function getCategoryByName(name: string): Category {

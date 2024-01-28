@@ -3,12 +3,12 @@ import {
   CloseButton, Heading, IconButton, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay,
   Popover, PopoverContent, PopoverTrigger, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CreateEvent from "../CreateEvent/CreateEvent";
 import CreateTask from "../CreateTask/CreateTask";
 import { Task } from "../models/Task";
-import { addCategory, deleteCategory, getCategories, getEvents, getTasks } from "../LocalStorage";
-import { AddIcon, EditIcon, SettingsIcon } from "@chakra-ui/icons";
+import { addCategory, deleteCategory, getCategories, getEvents, getTasks, updateCategory } from "../LocalStorage";
+import { AddIcon, CheckIcon, EditIcon, SettingsIcon } from "@chakra-ui/icons";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import { Category, Color } from "../models/Category";
@@ -31,7 +31,8 @@ const ToDoList: React.FC<ToDoListProps> = () => {
   } = useForm();
 
   const [colorCategoryToCreate, setColorCategoryToCreate] = useState<string | undefined>(undefined);
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
+  const [colorCategoryToEdit, setColorCategoryToEdit] = useState<string>("");
+  const [selectedEditIndex, setSelectedEditIndex] = useState<number | null>(null)
   const [categories, setCategories] = useState<Category[]>(getCategories());
   const [shakeDeleteButton, setShakeDeleteButton] = useState<number | null>(null);
 
@@ -66,6 +67,35 @@ const ToDoList: React.FC<ToDoListProps> = () => {
   const changeColor = (color: string) => {
     setColorCategoryToCreate(color);
     clearErrors("color");
+  }
+
+  const editCategory = (id: number) => {
+    const name = (document.getElementById("edit-category-name") as HTMLInputElement).value;
+    if (name === "") {
+      return;
+    }
+    const category = categories.find((category) => category.id === id)!;
+    category.name = name;
+    category.color = colorCategoryToEdit as Color;
+    updateCategory(category);
+    setCategories(getCategories());
+    setSelectedEditIndex(null);
+  }
+
+  const setEditCategoryIndex = (category: Category) => {
+    setSelectedEditIndex(category.id);
+    setColorCategoryToEdit(category.color);
+  }
+
+  useEffect(() => {
+    if (selectedEditIndex != null) {
+      const category = categories.find((category) => category.id === selectedEditIndex)!;
+      (document.getElementById("edit-category-name") as HTMLInputElement).value = category.name;
+    }
+  }, [selectedEditIndex]);
+
+  const closeModal = () => {
+    window.location.reload();
   }
 
   return (
@@ -110,7 +140,7 @@ const ToDoList: React.FC<ToDoListProps> = () => {
           </Accordion>
         </CardBody>
       </Card>
-      <Modal onClose={onClose} isOpen={isOpen} isCentered>
+      <Modal onClose={closeModal} isOpen={isOpen} isCentered>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Catégories</ModalHeader>
@@ -159,17 +189,30 @@ const ToDoList: React.FC<ToDoListProps> = () => {
                     <Tr key={category.id}>
                       <Td>
                         <Center>
-                          {category.name}
+                          {selectedEditIndex == category.id ? <Input id="edit-category-name"></Input> : category.name}
                         </Center>
                       </Td>
                       <Td>
                         <Center>
-                          <Box w="30px" h="30px" bgColor={category.color} borderRadius="100%"></Box>
+                          {selectedEditIndex == category.id ? <Popover>
+                            <PopoverTrigger>
+                              <Center>
+                                <Box h="30px" w="30px" bgColor={colorCategoryToEdit} borderRadius="8px"
+                                  border="1px solid white" cursor="pointer"></Box>
+                              </Center>
+                            </PopoverTrigger>
+                            <PopoverContent>
+                              <HexColorPicker color={colorCategoryToEdit} onChange={setColorCategoryToEdit} />
+                            </PopoverContent>
+                          </Popover>
+                          : <Box w="30px" h="30px" bgColor={category.color} borderRadius="100%" border="1px solid white"></Box>}
                         </Center>
                       </Td>
                       <Td>
                         <Center>
-                          <IconButton icon={<EditIcon />} aria-label="close"></IconButton>
+                          {selectedEditIndex == category.id 
+                          ? <IconButton icon={<CheckIcon />} onClick={() => editCategory(category.id)} aria-label="validate-edit" colorScheme="green"></IconButton>
+                          : <IconButton icon={<EditIcon />} onClick={() => setEditCategoryIndex(category)} aria-label="edit"></IconButton>}
                           <Box w="16px"></Box>
                           <IconButton className={shakeDeleteButton === category.id ? "shake" : undefined} icon={<CloseButton colorScheme="red" />} onClick={() => checkAndDeleteCategory(category.id)} aria-label="close" colorScheme="red"></IconButton>
                         </Center>
@@ -181,7 +224,7 @@ const ToDoList: React.FC<ToDoListProps> = () => {
             </TableContainer>
           </ModalBody>
           <ModalFooter>
-            <Button onClick={onClose}>Close</Button>
+            <Button onClick={closeModal}>Close</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
