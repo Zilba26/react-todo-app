@@ -55,9 +55,9 @@ header {
 
 #titleBox h2 {
   font-size: 30px;
-  font-family: Georgia, "Times New Roman", Times, serif;
 }
 
 .Header h2 {
   color: white;
+  font-weight: bold;
 }

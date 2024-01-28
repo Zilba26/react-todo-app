@@ -15,3 +15,12 @@
 90% { transform: translate(2px, 2px)   rotate(0deg);  }
 100%{ transform: translate(1px, -2px)  rotate(-1deg); }
 }
+.hoverable-icon:hover {
+  transform: scale(1.2);
+  transition: transform 0.2s ease-in-out;
+}
+
+.hoverable-button:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease-in-out;
+}

@@ -1,18 +1,18 @@
 .footer {
-    background-color: darkblue;
-    height: 40px;
-    flex-direction: column;
+  background-color: darkblue;
+  height: 40px;
+  flex-direction: column;
 }
 
-#rights, #names {
-    color: white;
-    font-family:Georgia, 'Times New Roman', Times, serif;
+#rights,
+#names {
+  color: white;
 }
 
 #rights {
-    font-size: 12px;
+  font-size: 12px;
 }
 
 #names {
-    font-size: 10px;
+  font-size: 10px;
 }
