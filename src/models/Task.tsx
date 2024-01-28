@@ -24,4 +24,15 @@ export class Task {
     this.category = category;
     this.priority = priority;
   }
+
+  toJson(): any {
+    return {
+      id: this.id,
+      name: this.name,
+      description: this.description,
+      date: this.date,
+      category: this.category,
+      priority: this.priority,
+    };
+  }
 }

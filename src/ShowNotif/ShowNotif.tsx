@@ -10,7 +10,6 @@ import {
     PopoverTrigger,
     PopoverContent,
     PopoverArrow,
-    PopoverCloseButton,
     PopoverBody
 } from '@chakra-ui/react';
 
@@ -26,7 +25,6 @@ const ShowNotif: React.FC<ShowNotifProps> = () => {
             </PopoverTrigger>
             <PopoverContent>
                 <PopoverArrow />
-                <PopoverCloseButton />
                 <PopoverBody>
                     {nofiticationString.length === 0 ? (
                         <p>Aucune notification</p>
