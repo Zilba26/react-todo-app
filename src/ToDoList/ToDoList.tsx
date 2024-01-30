@@ -19,7 +19,13 @@ interface ToDoListProps { }
 
 const ToDoList: React.FC<ToDoListProps> = () => {
   const tasks: Task[] = getTasks();
+  const [taskToSup, setTaskToSup] = useState<Task | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenDeleteTask,
+    onOpen: onOpenDeleteTask,
+    onClose: onCloseDeleteTask
+  } = useDisclosure()
 
   const {
     handleSubmit,
@@ -35,6 +41,7 @@ const ToDoList: React.FC<ToDoListProps> = () => {
   const [selectedEditIndex, setSelectedEditIndex] = useState<number | null>(null)
   const [categories, setCategories] = useState<Category[]>(getCategories());
   const [shakeDeleteButton, setShakeDeleteButton] = useState<number | null>(null);
+  const [chgtDone, setChgtDone] = useState<boolean>(false);
 
   const submitCategory = (formData: any) => {
     const { name } = formData;
@@ -78,6 +85,7 @@ const ToDoList: React.FC<ToDoListProps> = () => {
     category.name = name;
     category.color = colorCategoryToEdit as Color;
     updateCategory(category);
+    setChgtDone(true);
     setCategories(getCategories());
     setSelectedEditIndex(null);
   }
@@ -92,12 +100,12 @@ const ToDoList: React.FC<ToDoListProps> = () => {
       const category = categories.find((category) => category.id === selectedEditIndex)!;
       (document.getElementById("edit-category-name") as HTMLInputElement).value = category.name;
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedEditIndex]);
 
   const closeModal = () => {
     onClose();
-    window.location.reload();
+    if (chgtDone) window.location.reload();
   }
 
   function formaterDateEtHeure(date: Date): {
@@ -117,7 +125,14 @@ const ToDoList: React.FC<ToDoListProps> = () => {
   }
 
   function removeTask(task: Task) {
-    deleteTask(task.id);
+    setTaskToSup(task);
+    onOpenDeleteTask();
+  }
+
+  function deleteTaskAndCloseModal() {
+    deleteTask(taskToSup!.id);
+    setTaskToSup(null);
+    onCloseDeleteTask();
     window.location.reload();
   }
 
@@ -188,7 +203,7 @@ const ToDoList: React.FC<ToDoListProps> = () => {
           </Accordion>
         </CardBody>
       </Card >
-      <Modal onClose={closeModal} isOpen={isOpen} isCentered>
+      <Modal onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Catégories</ModalHeader>
@@ -273,6 +288,23 @@ const ToDoList: React.FC<ToDoListProps> = () => {
           </ModalBody>
           <ModalFooter>
             <Button onClick={closeModal}>Close</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal isOpen={isOpenDeleteTask} onClose={onCloseDeleteTask} isCentered autoFocus={false}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>{taskToSup?.name}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>Êtes-vous sûr de supprimer cette tâche ?</ModalBody>
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onCloseDeleteTask}>
+              Close
+            </Button>
+            <Button colorScheme="red" onClick={deleteTaskAndCloseModal}>
+              Supprimer
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

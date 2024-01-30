@@ -1,27 +1,44 @@
-# React + TypeScript + Vite
+# TODO APP
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Todo app réalisé dans le contexte de l'apprentissage de React à l'ESEO Angers. L'application est hébergée sur [Vercel](https://react-todo-app-two-mu.vercel.app/).
 
-Currently, two official plugins are available:
+## Installation
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Pour installer localement l'application, télécharger le projet et ouvrir un terminal dans le dossier du projet. Puis, exécuter la commande suivante:
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+```bash
+npm install
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Ensuite, pour lancer l'application, exécuter la commande suivante:
+
+```bash
+npm run dev
+```
+
+## Auteurs
+
+- [**Basile Lebaudy**](mailto:basile.lebaudy@reseau.eseo.fr)
+- [**Maxence Le Du**](mailto:maxence.ledu@reseau.eseo.fr)
+- [**Louis Legendre**](mailto:louis.legendre@reseau.eseo.fr)
+
+## Fonctionalités
+
+- Catégories :
+   - Créer une catégorie
+   - Supprimer une catégorie
+   - Modifier une catégorie
+Les catégories possèdent un nom et une couleur.
+- Tâches :
+   - Créer une tâche
+   - Supprimer une tâche
+   - Modifier une tâche
+   - Marquer une tâche comme terminée
+   - Afficher les tâches terminées
+   - Afficher les tâches non terminées
+   - Afficher toutes les tâches
+- Evénements :
+   - Créer un événement
+   - Supprimer un événement
+   - Modifier un événement
+   - Afficher les événements

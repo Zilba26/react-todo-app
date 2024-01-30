@@ -1,32 +1,11 @@
-import {
-  Box,
-  Button,
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  FormControl,
-  FormLabel,
-  Input,
-  Select,
-  Textarea,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, FormControl, FormLabel, Input, Textarea, Select, DrawerFooter, Button, Box } from "@chakra-ui/react";
 import React, { PropsWithChildren } from "react";
 
 import { Task } from "../models/Task";
 import { Priority } from "../models/Priority";
 import { useForm } from "react-hook-form";
-import {
-  addTask,
-  getCategories,
-  getCategoryByName,
-  getTaskById,
-  updateTask,
-} from "../LocalStorage";
+import { addTask, getCategories, getCategoryByName, getTaskById, updateTask } from "../LocalStorage";
+
 
 interface TaskDrawerProps extends PropsWithChildren {
   state: "create" | "edit";
