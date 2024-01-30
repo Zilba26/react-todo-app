@@ -1,26 +1,6 @@
 import { FC, useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Popover,
-  PopoverBody,
-  PopoverContent,
-  PopoverHeader,
-  PopoverTrigger,
-  useColorModeValue,
-  useDisclosure,
-} from "@chakra-ui/react";
-import {
-  deleteEvent as localStorageDeleteEvent,
-  getEventsByDay,
-} from "../LocalStorage";
+import { useColorModeValue, useDisclosure, Popover, PopoverTrigger, Button, PopoverContent, PopoverHeader, PopoverBody, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Box } from "@chakra-ui/react";
+import { deleteEvent as localStorageDeleteEvent, getEventsByDay,} from "../LocalStorage";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import moment from "moment";
@@ -101,10 +81,8 @@ const DayTasks: FC<DayTasksProps> = (props: DayTasksProps) => {
   const min = Math.min(...tasks.map((task) => task.startDate.getTime()));
   const max = Math.max(...tasks.map((task) => task.endDate.getTime()));
 
-  const minHour =
-    new Date(min).getHours() < 8 ? new Date(min) : new Date(0, 0, 0, 8);
-  const maxHour =
-    new Date(max).getHours() > 19 ? new Date(max) : new Date(0, 0, 0, 19);
+  const minHour = new Date(min).getHours() < 8 ? new Date(min) : new Date(0, 0, 0, 8);
+  const maxHour = new Date(max).getHours() > 19 ? new Date(max) : new Date(0, 0, 0, 19);
 
   return (
     <Box flex={1} onClick={setTriggerButtonPosition}>

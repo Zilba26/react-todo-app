@@ -25,6 +25,17 @@ export class Task {
     this.priority = priority;
   }
 
+  static fromJson(json: any): Task {
+    return new Task(
+      json.id,
+      json.name,
+      json.description,
+      new Date(json.date),
+      json.category,
+      json.priority
+    );
+  }
+
   toJson(): any {
     return {
       id: this.id,

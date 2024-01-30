@@ -27,7 +27,7 @@ export function getTasks(): Task[] {
   const tasks = JSON.parse(localStorage.getItem(ls.tasks) || "[]");
   return tasks.map((task: any) => {
     task.category = getCategory(task.category);
-    return task;
+    return Task.fromJson(task);
   });
 }
 
@@ -41,16 +41,18 @@ export function getTaskById(id: number): Task {
 }
 
 export function setTasks(tasks: Task[]) {
-  localStorage.setItem(ls.tasks, JSON.stringify(tasks));
-  //console.log(tasks);
-  //window.location.reload();
+  const tasksJson = tasks.map((task: Task) => {
+    const jsonTask = task.toJson();
+    jsonTask.category = task.category.id;
+    return jsonTask;
+  });
+  localStorage.setItem(ls.tasks, JSON.stringify(tasksJson));
+  window.location.reload();
 }
 
 export function addTask(task: Task) {
   const tasks = getTasks();
-  const jsonTask = task.toJson();
-  jsonTask.category = task.category.id;
-  tasks.push(jsonTask);
+  tasks.push(task);
   setTasks(tasks);
 
   addNotification(
@@ -73,9 +75,7 @@ export function updateTask(task: Task) {
   const tasks = getTasks();
   const newTasks = tasks.map((r: Task) => {
     if (r.id === task.id) {
-      const jsonTask = task.toJson();
-      jsonTask.category = task.category.id;
-      return jsonTask;
+      return task;
     }
     return r;
   });
@@ -88,7 +88,7 @@ export function getEvents(): Event[] {
   const events = JSON.parse(localStorage.getItem(ls.events) || "[]", dateReviver);
   return events.map((event: any) => {
     event.category = getCategory(event.category);
-    return event;
+    return Event.fromJson(event);
   });
 }
 
@@ -102,14 +102,18 @@ export function getEventsByDay(day: Date) : Event[] {
 }
 
 export function setEvents(events: Event[]) {
-  localStorage.setItem(ls.events, JSON.stringify(events));
+  const eventsJson = events.map((event: Event) => {
+    const jsonEvent = event.toJson();
+    jsonEvent.category = event.category.id;
+    return jsonEvent;
+  });
+  localStorage.setItem(ls.events, JSON.stringify(eventsJson));
+  window.location.reload();
 }
 
 export function addEvent(event: Event) {
   const events = getEvents();
-  const jsonEvent = event.toJson();
-  jsonEvent.category = event.category.id;
-  events.push(jsonEvent);
+  events.push(event);
   setEvents(events);
   addNotification(
     new Notification(
@@ -131,9 +135,7 @@ export function updateEvent(event: Event) {
   const events = getEvents();
   const newEvents = events.map((e: Event) => {
     if (e.id == event.id) {
-      const jsonEvent = event.toJson();
-      jsonEvent.category = event.category.id;
-      return jsonEvent;
+      return event;
     }
     return e;
   });
@@ -168,7 +170,6 @@ export function getCategoryByName(name: string): Category {
 
 export function setCategories(categories: Category[]) {
   localStorage.setItem(ls.categories, JSON.stringify(categories));
-  // window.location.reload();
 }
 
 export function addCategory(category: Category) {
@@ -204,7 +205,7 @@ export function getNotifications(): Notification[] {
 
 export function setNotifications(notifications: Notification[]) {
   localStorage.setItem(ls.notifications, JSON.stringify(notifications));
-  //window.location.reload();
+  window.location.reload();
 }
 
 export function addNotification(notification: Notification) {

@@ -32,6 +32,19 @@ export class Event {
     this.priority = priority;
   }
 
+  static fromJson(json: any): Event {
+    return new Event(
+      json.id,
+      json.name,
+      json.description,
+      new Date(json.startDate),
+      new Date(json.endDate),
+      new Date(json.reminder),
+      json.category,
+      json.priority
+    );
+  }
+
   toJson(): any {
     return {
       id: this.id,
