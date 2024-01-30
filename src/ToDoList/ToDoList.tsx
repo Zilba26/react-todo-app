@@ -35,6 +35,7 @@ const ToDoList: React.FC<ToDoListProps> = () => {
   const [selectedEditIndex, setSelectedEditIndex] = useState<number | null>(null)
   const [categories, setCategories] = useState<Category[]>(getCategories());
   const [shakeDeleteButton, setShakeDeleteButton] = useState<number | null>(null);
+  const [chgtDone, setChgtDone] = useState<boolean>(false);
 
   const submitCategory = (formData: any) => {
     const { name } = formData;
@@ -78,6 +79,7 @@ const ToDoList: React.FC<ToDoListProps> = () => {
     category.name = name;
     category.color = colorCategoryToEdit as Color;
     updateCategory(category);
+    setChgtDone(true);
     setCategories(getCategories());
     setSelectedEditIndex(null);
   }
@@ -97,7 +99,7 @@ const ToDoList: React.FC<ToDoListProps> = () => {
 
   const closeModal = () => {
     onClose();
-    window.location.reload();
+    if (chgtDone) window.location.reload();
   }
 
   function formaterDateEtHeure(date: Date): {

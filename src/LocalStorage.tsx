@@ -27,6 +27,7 @@ export function getTasks(): Task[] {
   const tasks = JSON.parse(localStorage.getItem(ls.tasks) || "[]");
   return tasks.map((task: any) => {
     task.category = getCategory(task.category);
+    return task;
   });
 }
 
@@ -41,14 +42,15 @@ export function getTaskById(id: number): Task {
 
 export function setTasks(tasks: Task[]) {
   localStorage.setItem(ls.tasks, JSON.stringify(tasks));
-  window.location.reload();
+  //console.log(tasks);
+  //window.location.reload();
 }
 
 export function addTask(task: Task) {
   const tasks = getTasks();
   const jsonTask = task.toJson();
   jsonTask.category = task.category.id;
-  tasks.push(task);
+  tasks.push(jsonTask);
   setTasks(tasks);
 
   addNotification(
@@ -101,7 +103,6 @@ export function getEventsByDay(day: Date) : Event[] {
 
 export function setEvents(events: Event[]) {
   localStorage.setItem(ls.events, JSON.stringify(events));
-  window.location.reload();
 }
 
 export function addEvent(event: Event) {
@@ -203,7 +204,7 @@ export function getNotifications(): Notification[] {
 
 export function setNotifications(notifications: Notification[]) {
   localStorage.setItem(ls.notifications, JSON.stringify(notifications));
-  window.location.reload();
+  //window.location.reload();
 }
 
 export function addNotification(notification: Notification) {
