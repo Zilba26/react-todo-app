@@ -44,3 +44,8 @@ Les tâches ont un nom, une catégorie, une date et une heure, une priorité, ai
    - Afficher les événements sur un calendrier à droite de la page de l'app
 
 Les évènements ont un nom, un intervalle de temps, un rappel, une catégorie, une priorité, ainsi qu'une description optionnelle
+- Notifications :
+  - Supprimer une notification
+  - Voir les notifications dans le header
+
+Les notifications sont liés aux tâches et évènements et sont affichés en fonction de la date et du rappel renseignés
