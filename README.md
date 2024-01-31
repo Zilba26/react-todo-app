@@ -33,12 +33,11 @@ Les catégories possèdent un nom et une couleur.
    - Créer une tâche
    - Supprimer une tâche
    - Modifier une tâche
-   - Marquer une tâche comme terminée
-   - Afficher les tâches terminées
-   - Afficher les tâches non terminées
-   - Afficher toutes les tâches
+   - Voir les tâches sur un panel à gauche sur la page de l'app
+Les tâches ont un nom, une catégorie, une date et une heure, une priorité, ainsi qu'une description optionnelle
 - Evénements :
    - Créer un événement
    - Supprimer un événement
    - Modifier un événement
-   - Afficher les événements
+   - Afficher les événements sur un calendrier à droite de la page de l'app
+Les évènements ont un nom, un intervalle de temps, un rappel, une catégorie, une priorité, ainsi qu'une description optionnelle
